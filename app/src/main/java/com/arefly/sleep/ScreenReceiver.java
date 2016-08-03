@@ -20,12 +20,11 @@ public class ScreenReceiver extends BroadcastReceiver {
 
         // http://baroqueworksdev.blogspot.hk/2012/09/how-to-handle-screen-onoff-and-keygurad.html
         String action = intent.getAction();
+        
         if (action.equals(Intent.ACTION_SHUTDOWN) || action.equals(context.getResources().getString(R.string.htc_action_quickboot_poweroff))) {
             Logger.v("ACTION_SHUTDOWN || QUICKBOOT_POWEROFF");
             saveLockData(false);
-        } else if (action.equals(Intent.ACTION_BOOT_COMPLETED) || action.equals(context.getResources().getString(R.string.htc_action_quickboot_poweron))) {
-            Logger.v("ACTION_BOOT_COMPLETED || QUICKBOOT_POWERON");
-            saveLockData(true);
+            return;             // Don't continue if phone is shutting down
         }
 
         if (action.equals(Intent.ACTION_SCREEN_OFF)) {
@@ -46,8 +45,9 @@ public class ScreenReceiver extends BroadcastReceiver {
 
     }
 
-    private void saveLockData(boolean isUnlock) {
+    public static void saveLockData(boolean isUnlock) {
         Logger.d("saveLockStatus("+isUnlock+") called");
+        // Have to judge if current time is inside range of max. sleep time as this method is call-on-boot
     }
 
 }

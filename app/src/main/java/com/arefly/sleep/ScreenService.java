@@ -47,8 +47,6 @@ public class ScreenService extends Service {
         screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
         screenStateFilter.addAction(Intent.ACTION_SHUTDOWN);
         screenStateFilter.addAction(getString(R.string.htc_action_quickboot_poweroff));
-        screenStateFilter.addAction(Intent.ACTION_BOOT_COMPLETED);
-        screenStateFilter.addAction(getString(R.string.htc_action_quickboot_poweron));
         mReceiver = new ScreenReceiver();
         registerReceiver(mReceiver, screenStateFilter);
     }
