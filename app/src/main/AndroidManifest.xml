@@ -23,11 +23,19 @@
         <service android:name=".ScreenService">
         </service>
 
+        <receiver android:name=".BootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"></action>
+            </intent-filter>
+        </receiver>
+
         <receiver android:name=".CheckServiceAlarmReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.NOTIFY" />
             </intent-filter>
         </receiver>
+
     </application>
 
 </manifest>

@@ -4,12 +4,11 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.orhanobut.logger.Logger;
-
-import java.util.Calendar;
 
 /**
  * Created by eflyjason on 3/8/2016.
@@ -22,12 +21,19 @@ public class StatisticActivity extends AppCompatActivity {
         Logger.i("StatisticActivity onCreate()");
         setContentView(R.layout.activity_statistic);
 
-        CheckServiceAlarmReceiver.startOrStopScreenServiceIntent(this);
+        initServiceAndAlarm(getApplicationContext());
+    }
 
 
-        AlarmManager checkServiceAlarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(getApplicationContext(), CheckServiceAlarmReceiver.class);
-        PendingIntent checkServiceAlarmIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+    public static void initServiceAndAlarm(Context context) {
+        CheckServiceAlarmReceiver.startOrStopScreenServiceIntent(context);
+        setCheckServiceAlarm(context);
+    }
+
+    private static void setCheckServiceAlarm(Context context) {
+        AlarmManager checkServiceAlarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, CheckServiceAlarmReceiver.class);
+        PendingIntent checkServiceAlarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
 
 
         try {
@@ -38,12 +44,13 @@ public class StatisticActivity extends AppCompatActivity {
         }
 
 
-        Calendar calendar = Calendar.getInstance();
+        /*Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 13);
-        calendar.set(Calendar.MINUTE, 45);
-        checkServiceAlarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, checkServiceAlarmIntent);
-        //checkServiceAlarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 2000, checkServiceAlarmIntent);
-
+        calendar.set(Calendar.MINUTE, 45);*/
+        //checkServiceAlarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, checkServiceAlarmIntent);
+        checkServiceAlarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, checkServiceAlarmIntent);
+        //checkServiceAlarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 6000, checkServiceAlarmIntent);
+        //checkServiceAlarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 6000, checkServiceAlarmIntent);
     }
 }
