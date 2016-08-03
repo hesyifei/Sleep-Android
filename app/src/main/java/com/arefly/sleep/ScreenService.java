@@ -32,9 +32,9 @@ public class ScreenService extends Service {
         Notification notification = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("你昨天晚上睡了6個小時,今天睡久一點吧!\n\n點擊查看詳細統計記錄"))
-                .setContentTitle("晚上好!")
-                .setContentText("你昨天晚上睡了6個小時!")
+                        .bigText("晚上好！今晚多睡會吧！\n\n點擊查看詳細統計記錄..."))
+                .setContentTitle("昨晚睡眠時間：6小時")
+                .setContentText("點擊查看詳細統計記錄...")
                 .setContentIntent(notificationPendingIntent)
                 .build();
 
