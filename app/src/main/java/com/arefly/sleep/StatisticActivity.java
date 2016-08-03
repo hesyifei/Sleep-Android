@@ -1,5 +1,6 @@
 package com.arefly.sleep;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -15,5 +16,8 @@ public class StatisticActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Logger.i("StatisticActivity onCreate()");
         setContentView(R.layout.activity_statistic);
+
+        Intent screenServiceIntent = new Intent(this, ScreenService.class);
+        startService(screenServiceIntent);
     }
 }
