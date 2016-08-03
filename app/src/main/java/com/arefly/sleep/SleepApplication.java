@@ -14,7 +14,7 @@ public class SleepApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Logger.init()
+        Logger.init("LOGGER-SLEEP")
                 .methodCount(0)
                 .hideThreadInfo()
                 .logLevel(BuildConfig.DEBUG ? LogLevel.FULL : LogLevel.NONE);       // default LogLevel.FULL
