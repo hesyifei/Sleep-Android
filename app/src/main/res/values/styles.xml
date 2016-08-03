@@ -8,4 +8,22 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+
+    <style name="FullPageWidthViewWithPadding">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:paddingBottom">@dimen/inner_view_vertical_margin</item>
+        <item name="android:paddingLeft">@dimen/inner_view_horizontal_margin</item>
+        <item name="android:paddingRight">@dimen/inner_view_horizontal_margin</item>
+        <item name="android:paddingTop">@dimen/inner_view_vertical_margin</item>
+    </style>
+
+    <style name="GeneralStatisticLabel">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:background">#00ffffff</item>
+        <item name="android:gravity">start|center</item>
+        <item name="android:textColor">@color/colorWhiteText</item>
+    </style>
+
 </resources>
