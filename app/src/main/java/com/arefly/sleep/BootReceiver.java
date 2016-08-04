@@ -25,7 +25,7 @@ public class BootReceiver extends BroadcastReceiver {
             Logger.e("isScreenOn: " + isScreenOn);
 
             if (isScreenOn) {
-                ScreenReceiver.saveLockData(true);
+                ScreenReceiver.saveLockData(true, context.getApplicationContext());
             }
         }
     }
