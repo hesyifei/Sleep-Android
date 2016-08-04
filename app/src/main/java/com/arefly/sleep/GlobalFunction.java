@@ -18,17 +18,21 @@ public class GlobalFunction {
     public static void startOrStopScreenServiceIntent(Context context) {
         Intent screenServiceIntent = new Intent(context, ScreenService.class);
 
-        Calendar now = Calendar.getInstance();
-        Date currentTime = GlobalFunction.parseTime(now.get(Calendar.HOUR_OF_DAY) + ":" + now.get(Calendar.MINUTE));
-        Logger.v("isPossibleSleepTime: " + isPossibleSleepTime(currentTime));
+        Logger.v("isCurrentTimePossibleSleepTime: " + isCurrentTimePossibleSleepTime());
 
-        if (isPossibleSleepTime(currentTime)) {
+        if (isCurrentTimePossibleSleepTime()) {
             context.startService(screenServiceIntent);
         } else {
             context.stopService(screenServiceIntent);
         }
     }
 
+
+    public static boolean isCurrentTimePossibleSleepTime() {
+        Calendar now = Calendar.getInstance();
+        Date currentTime = GlobalFunction.parseTime(now.get(Calendar.HOUR_OF_DAY) + ":" + now.get(Calendar.MINUTE));
+        return isPossibleSleepTime(currentTime);
+    }
 
     public static boolean isPossibleSleepTime(Date currentTime) {
         // Tell user the earlier the better if he/she is not sure about the max. sleep time range
