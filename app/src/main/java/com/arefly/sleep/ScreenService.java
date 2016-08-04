@@ -29,6 +29,7 @@ public class ScreenService extends Service {
         PendingIntent notificationPendingIntent = PendingIntent.getActivity(this, 0,
                 notificationIntent, 0);
 
+        // TODO: Hide notification on morning?
         Notification notification = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setStyle(new NotificationCompat.BigTextStyle()
@@ -42,7 +43,7 @@ public class ScreenService extends Service {
 
 
         IntentFilter screenStateFilter = new IntentFilter();
-        screenStateFilter.addAction(Intent.ACTION_USER_PRESENT);
+        //screenStateFilter.addAction(Intent.ACTION_USER_PRESENT);
         screenStateFilter.addAction(Intent.ACTION_SCREEN_ON);
         screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
         screenStateFilter.addAction(Intent.ACTION_SHUTDOWN);
