@@ -26,7 +26,7 @@ public class StatisticActivity extends AppCompatActivity {
 
 
     public static void initServiceAndAlarm(Context context) {
-        CheckServiceAlarmReceiver.startOrStopScreenServiceIntent(context);
+        GlobalFunction.startOrStopScreenServiceIntent(context);
         setCheckServiceAlarm(context);
     }
 
