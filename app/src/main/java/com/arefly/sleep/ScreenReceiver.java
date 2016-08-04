@@ -20,18 +20,22 @@ public class ScreenReceiver extends BroadcastReceiver {
 
         // http://baroqueworksdev.blogspot.hk/2012/09/how-to-handle-screen-onoff-and-keygurad.html
         String action = intent.getAction();
-        
+
         if (action.equals(Intent.ACTION_SHUTDOWN) || action.equals(context.getResources().getString(R.string.htc_action_quickboot_poweroff))) {
             Logger.v("ACTION_SHUTDOWN || QUICKBOOT_POWEROFF");
             saveLockData(false);
             return;             // Don't continue if phone is shutting down
         }
 
+        KeyguardManager mKeyguard = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
         if (action.equals(Intent.ACTION_SCREEN_OFF)) {
-            Logger.v("ACTION_SCREEN_OFF");
-            saveLockData(false);
+            if (mKeyguard.inKeyguardRestrictedInputMode()) {
+                Logger.v("ACTION_SCREEN_OFF: locked");
+            } else {
+                Logger.v("ACTION_SCREEN_OFF: unlocked");
+                saveLockData(false);
+            }
         } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
-            KeyguardManager mKeyguard = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
             if (mKeyguard.inKeyguardRestrictedInputMode()) {
                 Logger.v("ACTION_SCREEN_ON: locked");
             } else {
