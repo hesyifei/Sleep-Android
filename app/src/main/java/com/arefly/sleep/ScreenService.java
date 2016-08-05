@@ -33,10 +33,12 @@ public class ScreenService extends Service {
         Notification notification = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("晚上好！今晚多睡會吧！\n\n點擊查看詳細統計記錄..."))
+                        .bigText("晚上好！今晚多睡會吧！\n\n輕觸查看詳細統計記錄..."))
                 .setContentTitle("昨晚睡眠時間：6小時")
-                .setContentText("點擊查看詳細統計記錄...")
+                .setContentText("輕觸查看詳細統計記錄")
                 .setContentIntent(notificationPendingIntent)
+                .setPriority(Notification.PRIORITY_DEFAULT)
+                .setCategory(Notification.CATEGORY_SERVICE)
                 .build();
 
         startForeground(88, notification);
