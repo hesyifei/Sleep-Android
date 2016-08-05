@@ -6,11 +6,6 @@ import android.content.Intent;
 
 import com.orhanobut.logger.Logger;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-
 /**
  * Created by eflyjason on 3/8/2016.
  */
