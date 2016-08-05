@@ -9,11 +9,11 @@
         android:fullBackupContent="@xml/backup_scheme"
         android:persistent="true"
         android:icon="@mipmap/ic_launcher"
-        android:name=".SleepApplication"
+        android:name=".applications.SleepApplication"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".StatisticActivity">
+        <activity android:name=".activities.StatisticActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,17 +21,17 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ScreenService">
+        <service android:name=".services.ScreenService">
         </service>
 
-        <receiver android:name=".BootReceiver">
+        <receiver android:name=".receivers.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".CheckServiceAlarmReceiver">
+        <receiver android:name=".receivers.CheckServiceAlarmReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.NOTIFY" />
             </intent-filter>

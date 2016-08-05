@@ -1,4 +1,4 @@
-package com.arefly.sleep;
+package com.arefly.sleep.services;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -10,6 +10,9 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 
+import com.arefly.sleep.R;
+import com.arefly.sleep.activities.StatisticActivity;
+import com.arefly.sleep.receivers.ScreenReceiver;
 import com.orhanobut.logger.Logger;
 
 /**

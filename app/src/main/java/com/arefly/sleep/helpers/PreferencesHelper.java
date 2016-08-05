@@ -1,8 +1,10 @@
-package com.arefly.sleep;
+package com.arefly.sleep.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import com.arefly.sleep.R;
 
 /**
  * Created by eflyjason on 5/8/2016.

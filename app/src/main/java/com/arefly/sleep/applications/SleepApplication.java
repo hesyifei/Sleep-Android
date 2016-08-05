@@ -1,7 +1,8 @@
-package com.arefly.sleep;
+package com.arefly.sleep.applications;
 
 import android.app.Application;
 
+import com.arefly.sleep.BuildConfig;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 

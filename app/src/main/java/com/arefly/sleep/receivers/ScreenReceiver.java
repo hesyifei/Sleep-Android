@@ -1,9 +1,13 @@
-package com.arefly.sleep;
+package com.arefly.sleep.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import com.arefly.sleep.R;
+import com.arefly.sleep.data.objects.ScreenOpsRecord;
+import com.arefly.sleep.helpers.GlobalFunction;
+import com.arefly.sleep.helpers.PreferencesHelper;
 import com.orhanobut.logger.Logger;
 
 import java.util.Date;

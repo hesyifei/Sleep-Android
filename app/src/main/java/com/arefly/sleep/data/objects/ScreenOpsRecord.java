@@ -1,4 +1,4 @@
-package com.arefly.sleep;
+package com.arefly.sleep.data.objects;
 
 import java.util.Date;
 

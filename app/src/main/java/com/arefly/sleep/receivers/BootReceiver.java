@@ -1,4 +1,4 @@
-package com.arefly.sleep;
+package com.arefly.sleep.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.PowerManager;
 
+import com.arefly.sleep.R;
+import com.arefly.sleep.activities.StatisticActivity;
 import com.orhanobut.logger.Logger;
 
 /**

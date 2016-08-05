@@ -1,8 +1,9 @@
-package com.arefly.sleep;
+package com.arefly.sleep.helpers;
 
 import android.content.Context;
 import android.content.Intent;
 
+import com.arefly.sleep.services.ScreenService;
 import com.orhanobut.logger.Logger;
 
 import java.text.SimpleDateFormat;

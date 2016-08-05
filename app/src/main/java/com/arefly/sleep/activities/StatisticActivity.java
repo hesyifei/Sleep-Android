@@ -1,4 +1,4 @@
-package com.arefly.sleep;
+package com.arefly.sleep.activities;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -8,6 +8,10 @@ import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.arefly.sleep.receivers.CheckServiceAlarmReceiver;
+import com.arefly.sleep.helpers.GlobalFunction;
+import com.arefly.sleep.helpers.PreferencesHelper;
+import com.arefly.sleep.R;
 import com.orhanobut.logger.Logger;
 
 /**
