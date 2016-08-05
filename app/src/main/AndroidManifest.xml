@@ -6,6 +6,7 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_scheme"
         android:persistent="true"
         android:icon="@mipmap/ic_launcher"
         android:name=".SleepApplication"
