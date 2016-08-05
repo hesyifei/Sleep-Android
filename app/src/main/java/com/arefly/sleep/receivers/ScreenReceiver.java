@@ -1,10 +1,15 @@
 package com.arefly.sleep.receivers;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.NotificationCompat;
 
 import com.arefly.sleep.R;
+import com.arefly.sleep.activities.StatisticActivity;
 import com.arefly.sleep.data.objects.ScreenOpsRecord;
 import com.arefly.sleep.helpers.GlobalFunction;
 import com.arefly.sleep.helpers.PreferencesHelper;
@@ -78,8 +83,30 @@ public class ScreenReceiver extends BroadcastReceiver {
         Date currentTime = GlobalFunction.parseTime(GlobalFunction.getCurrentTimeString());
         if (!GlobalFunction.isRealSleepTime(currentTime, context)) {
             if (isScreenOn) {
+                Logger.i("!isRealSleepTime + isScreenOn = isWakenUp + stopService");
                 PreferencesHelper.setIsWakenUpBool(true, context);
                 GlobalFunction.startOrStopScreenServiceIntent(context);
+
+                // TODO: Change StatisticActivity to YesterdayActivity
+                Intent notificationIntent = new Intent(context, StatisticActivity.class);
+                PendingIntent notificationPendingIntent = PendingIntent.getActivity(context, 0,
+                        notificationIntent, 0);
+
+                Notification notification = new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText("早安\n\n\n長文字"))
+                        .setContentTitle("早安")
+                        .setContentText("輕觸查看詳細信息")
+                        .setContentIntent(notificationPendingIntent)
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setPriority(Notification.PRIORITY_DEFAULT)
+                        .setCategory(Notification.CATEGORY_EVENT)
+                        .setAutoCancel(true)
+                        .build();
+                NotificationManager mNotificationManager =
+                        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.notify(1, notification);
             }
         }
 
