@@ -22,6 +22,9 @@ public class StatisticActivity extends AppCompatActivity {
         setContentView(R.layout.activity_statistic);
 
         initServiceAndAlarm(getApplicationContext());
+
+        PreferencesHelper.setSleepTimeString("14:39", this.getApplicationContext());
+        PreferencesHelper.setWakeTimeString("14:40", this.getApplicationContext());
     }
 
 

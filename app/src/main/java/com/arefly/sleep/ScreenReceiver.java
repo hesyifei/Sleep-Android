@@ -39,33 +39,47 @@ public class ScreenReceiver extends BroadcastReceiver {
     }
 
     public static void saveLockData(boolean isScreenOn, Context context) {
-        Logger.d("saveLockStatus(" + isScreenOn + ") called");
-        // Have to judge if current time is inside range of max. sleep time as this method is call-on-boot
+        Logger.d("saveLockData(" + isScreenOn + ") called");
+        // Have to judge if current time is inside range of max. sleep time as this method is call-on-boot (seemly done)
 
-        // Use them like regular java objects
-        ScreenOpsRecord record = new ScreenOpsRecord();
-        record.setOperations(isScreenOn ? "on" : "off");
-        record.setTime(new Date());
+        if (GlobalFunction.isCurrentTimePossibleSleepTime(context)) {
 
-        // Create a RealmConfiguration that saves the Realm file in the app's "files" directory.
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(context).build();
-        Realm.setDefaultConfiguration(realmConfig);
+            ScreenOpsRecord record = new ScreenOpsRecord();
+            record.setOperations(isScreenOn ? "on" : "off");
+            record.setTime(new Date());
 
-        // Get a Realm instance for this thread
-        Realm realm = Realm.getDefaultInstance();
+            // Create a RealmConfiguration that saves the Realm file in the app's "files" directory.
+            RealmConfiguration realmConfig = new RealmConfiguration.Builder(context).build();
+            Realm.setDefaultConfiguration(realmConfig);
 
-        // Persist your data in a transaction
-        realm.beginTransaction();
-        //realm.delete(ScreenOpsRecord.class);
-        ScreenOpsRecord realmUser = realm.copyToRealm(record);
-        realm.commitTransaction();
+            Realm realm = Realm.getDefaultInstance();
+
+            realm.beginTransaction();
+            //realm.delete(ScreenOpsRecord.class);
+            ScreenOpsRecord realmRecord = realm.copyToRealm(record);
+            realm.commitTransaction();
+            Logger.d("realmRecord saved: " + realmRecord);
+
+
+            RealmResults<ScreenOpsRecord> result2 = realm.where(ScreenOpsRecord.class)
+                    .findAll();
+
+            //Logger.d(result2);
+        } else {
+            Logger.v("isCurrentTimePossibleSleepTime = false: do nothing");
+        }
 
 
 
-        RealmResults<ScreenOpsRecord> result2 = realm.where(ScreenOpsRecord.class)
-                .findAll();
+        Date currentTime = GlobalFunction.parseTime(GlobalFunction.getCurrentTimeString());
+        if (!GlobalFunction.isRealSleepTime(currentTime, context)) {
+            if (isScreenOn) {
+                PreferencesHelper.setIsWakenUpBool(true, context);
+                GlobalFunction.startOrStopScreenServiceIntent(context);
+            }
+        }
 
-        Logger.d(result2);
+
 
     }
 
