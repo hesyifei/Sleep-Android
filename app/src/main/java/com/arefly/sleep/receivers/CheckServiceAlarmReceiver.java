@@ -28,6 +28,7 @@ public class CheckServiceAlarmReceiver extends BroadcastReceiver {
 
 
 
+        // TODO: Not sure if StartScreenAtEndAlarmReceiver is called
         AlarmManager startScreenAtEndAlarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent startScreenAtEndAlarmReceiver = new Intent(context, StartScreenAtEndAlarmReceiver.class);
         PendingIntent startScreenAtEndAlarmReceiverIntent = PendingIntent.getBroadcast(context, 0, startScreenAtEndAlarmReceiver, 0);
@@ -55,23 +56,14 @@ public class CheckServiceAlarmReceiver extends BroadcastReceiver {
         calendar.set(Calendar.SECOND, 0);
         calendar.add(Calendar.HOUR_OF_DAY, -1);         // Fire alarm 1 hour earlier to make sure that the alarm is fired
 
-        if (currentTime.before(sleepTime)) {
-
-        } else {
+        if (currentTime.after(sleepTime)) {
             calendar.add(Calendar.DATE, 1);
         }
         Logger.v("startScreenAtEndAlarmMgr calendar: " + GlobalFunction.getCalendarDateString(calendar));
 
 
-        // http://stackoverflow.com/a/38302891/2603230
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        int ALARM_TYPE = AlarmManager.RTC_WAKEUP;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-            am.setExactAndAllowWhileIdle(ALARM_TYPE, calendar.getTimeInMillis(), startScreenAtEndAlarmReceiverIntent);
-        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            am.setExact(ALARM_TYPE, calendar.getTimeInMillis(), startScreenAtEndAlarmReceiverIntent);
-        else
-            am.set(ALARM_TYPE, calendar.getTimeInMillis(), startScreenAtEndAlarmReceiverIntent);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), startScreenAtEndAlarmReceiverIntent);
 
         Logger.d("startScreenAtEndAlarmMgr created");
     }
