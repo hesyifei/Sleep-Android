@@ -6,9 +6,11 @@ import android.content.Intent;
 import com.arefly.sleep.services.ScreenService;
 import com.orhanobut.logger.Logger;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 /**
@@ -127,8 +129,14 @@ public class GlobalFunction {
      * @return String (Format: 09:00)
      */
     public static String getCurrentTimeString() {
-        Calendar now = Calendar.getInstance();
+        Calendar now = GregorianCalendar.getInstance();
         return now.get(Calendar.HOUR_OF_DAY) + ":" + now.get(Calendar.MINUTE);
+    }
+
+
+    public static String getCalendarDateString(Calendar calendar) {
+        DateFormat format = SimpleDateFormat.getDateTimeInstance();
+        return format.format(calendar.getTime());
     }
 
 }
