@@ -25,6 +25,7 @@ public class StartScreenAtEndAlarmReceiver extends BroadcastReceiver {
             // If current time is not real sleep time
             if (!isWakenUpBool) {
                 // If user haven't waken up (turn on screen) yet
+                // saveLockData(true) = pretend the user have turned on the screen
                 ScreenReceiver.saveLockData(true, context);
 
             }
