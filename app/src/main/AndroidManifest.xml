@@ -37,6 +37,9 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".receivers.StartScreenAtEndAlarmReceiver">
+        </receiver>
+
     </application>
 
 </manifest>
