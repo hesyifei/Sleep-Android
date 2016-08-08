@@ -3,15 +3,22 @@ package com.arefly.sleep.helpers;
 import android.content.Context;
 import android.content.Intent;
 
+import com.arefly.sleep.data.objects.ScreenOpsRecord;
 import com.arefly.sleep.services.ScreenService;
 import com.orhanobut.logger.Logger;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by eflyjason on 4/8/2016.
@@ -44,6 +51,44 @@ public class GlobalFunction {
         }
 
         Logger.v("isWakenUp: " + PreferencesHelper.getIsWakenUpBool(context));
+    }
+
+
+    public static RealmResults<ScreenOpsRecord> removeRepeatingOperationsInTimeRange(Realm realm, Date startTime, Date endTime) {
+        RealmResults<ScreenOpsRecord> allThisSleepCycleRecord = realm.where(ScreenOpsRecord.class)
+                .greaterThanOrEqualTo("time", startTime)
+                .lessThanOrEqualTo("time", endTime)
+                .findAllSorted("time", Sort.ASCENDING);
+        Logger.v("allThisSleepCycleRecord: " + allThisSleepCycleRecord);
+
+
+        List<Integer> locationNeededToBeRemoved = new ArrayList<>();
+        for (int i = 0; i < allThisSleepCycleRecord.size(); i++) {
+            ScreenOpsRecord eachRecord = allThisSleepCycleRecord.get(i);
+            Logger.v("allThisSleepCycleRecordArray[" + i + "]: " + eachRecord);
+            if (i + 1 <= allThisSleepCycleRecord.size() - 1) {
+                // If have next record
+                ScreenOpsRecord nextRecord = allThisSleepCycleRecord.get(i + 1);
+                String eachRecordOperation = eachRecord.getOperation();
+                String nextRecordOperation = nextRecord.getOperation();
+                if ((eachRecordOperation.equals("on") && !nextRecordOperation.equals("off"))
+                        || (eachRecordOperation.equals("off") && !nextRecordOperation.equals("on"))) {
+                    locationNeededToBeRemoved.add(i);
+                }
+            }
+        }
+        Logger.v("locationNeededToBeRemoved: " + locationNeededToBeRemoved);
+        if (!locationNeededToBeRemoved.isEmpty()) {
+            realm.beginTransaction();
+            for (Integer locationInteger : locationNeededToBeRemoved) {
+                // Can simply delete as realm object is lazy
+                allThisSleepCycleRecord.deleteFromRealm(locationInteger);
+            }
+            realm.commitTransaction();
+            Logger.v("locationNeededToBeRemoved removed from realm. allThisSleepCycleRecord: " + allThisSleepCycleRecord);
+        }
+
+        return allThisSleepCycleRecord;
     }
 
 

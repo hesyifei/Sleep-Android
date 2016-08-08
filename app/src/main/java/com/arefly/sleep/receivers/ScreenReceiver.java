@@ -108,10 +108,8 @@ public class ScreenReceiver extends BroadcastReceiver {
                 Logger.v("endRecord: " + endRecord);
 
                 realm.beginTransaction();
-
                 // Can simply set as realm object is lazy
                 endRecord.setLastRecord(true);
-
                 realm.commitTransaction();
 
                 Logger.v("endRecord (new): " + endRecord);
@@ -139,37 +137,7 @@ public class ScreenReceiver extends BroadcastReceiver {
                 Logger.v("startRecord: " + startRecord);
 
 
-                RealmResults<ScreenOpsRecord> allThisSleepCycleRecord = realm.where(ScreenOpsRecord.class)
-                        .greaterThanOrEqualTo("time", startRecord.getTime())
-                        .lessThanOrEqualTo("time", endRecord.getTime())
-                        .findAllSorted("time", Sort.ASCENDING);
-                Logger.v("allThisSleepCycleRecord: " + allThisSleepCycleRecord);
-
-
-                List<Integer> locationNeededToBeRemoved = new ArrayList<>();
-                for (int i = 0; i < allThisSleepCycleRecord.size(); i++) {
-                    ScreenOpsRecord eachRecord = allThisSleepCycleRecord.get(i);
-                    Logger.v("allThisSleepCycleRecordArray[" + i + "]: " + eachRecord);
-                    if (i + 1 <= allThisSleepCycleRecord.size() - 1) {
-                        // If have next record
-                        ScreenOpsRecord nextRecord = allThisSleepCycleRecord.get(i + 1);
-                        String eachRecordOperation = eachRecord.getOperation();
-                        String nextRecordOperation = nextRecord.getOperation();
-                        if ((eachRecordOperation.equals("on") && !nextRecordOperation.equals("off"))
-                                || (eachRecordOperation.equals("off") && !nextRecordOperation.equals("on"))) {
-                            locationNeededToBeRemoved.add(i);
-                        }
-                    }
-                }
-                Logger.v("locationNeededToBeRemoved: " + locationNeededToBeRemoved);
-                if (!locationNeededToBeRemoved.isEmpty()) {
-                    realm.beginTransaction();
-                    for (Integer locationInteger : locationNeededToBeRemoved) {
-                        allThisSleepCycleRecord.deleteFromRealm(locationInteger);
-                    }
-                    realm.commitTransaction();
-                    Logger.v("locationNeededToBeRemoved removed from realm. allThisSleepCycleRecord: " + allThisSleepCycleRecord);
-                }
+                GlobalFunction.removeRepeatingOperationsInTimeRange(realm, startRecord.getTime(), endRecord.getTime());
 
             }
         }
