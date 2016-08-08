@@ -16,7 +16,6 @@ import com.arefly.sleep.helpers.PreferencesHelper;
 import com.orhanobut.logger.Logger;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import io.realm.Realm;
@@ -144,6 +143,8 @@ public class ScreenReceiver extends BroadcastReceiver {
                 GlobalFunction.removeRepeatingOperationsInTimeRange(realm, startTime, endTime);
 
                 Map<Date, Long> screenOffTimeAndDuration = GlobalFunction.getScreenOffTimeAndDuration(realm, startTime, endTime);
+
+                Map<Date, Long> combinedScreenOffTimeAndDuration = GlobalFunction.getCombinedScreenOffTimeAndDuration(realm, startTime, endTime);
 
 
                 // http://stackoverflow.com/a/5911199/2603230

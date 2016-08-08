@@ -29,6 +29,7 @@ public class GlobalFunction {
 
     /**
      * Start or stop (based on isCurrentTimePossibleSleepTime()) screen service
+     *
      * @param context Context (preferably application context)
      */
     public static void startOrStopScreenServiceIntent(Context context) {
@@ -56,6 +57,14 @@ public class GlobalFunction {
     }
 
 
+    /**
+     * get screen off time and duration
+     *
+     * @param realm     Realm
+     * @param startTime start time
+     * @param endTime   end time
+     * @return time (Date) and duration (Long in milliseconds)
+     */
     public static Map<Date, Long> getScreenOffTimeAndDuration(Realm realm, Date startTime, Date endTime) {
         RealmResults<ScreenOpsRecord> allThisSleepCycleOffRecord = realm.where(ScreenOpsRecord.class)
                 .greaterThanOrEqualTo("time", startTime)
@@ -79,11 +88,53 @@ public class GlobalFunction {
             Logger.v("timeDiff: " + timeDiff);
             screenOffTimeAndDuration.put(eachOffRecord.getTime(), timeDiff);
         }
-        Logger.e("screenOffTimeAndDuration: " + screenOffTimeAndDuration);
+        Logger.v("screenOffTimeAndDuration: " + screenOffTimeAndDuration);
         return screenOffTimeAndDuration;
     }
 
 
+    /**
+     * get combined screen off time and duration (i.e. remove screen off intervals which are too short)
+     *
+     * @param realm     Realm
+     * @param startTime start time
+     * @param endTime   end time
+     * @return time (Date) and duration (Long in milliseconds)
+     */
+    public static Map<Date, Long> getCombinedScreenOffTimeAndDuration(Realm realm, Date startTime, Date endTime) {
+        Map<Date, Long> combinedScreenOffTimeAndDuration = getScreenOffTimeAndDuration(realm, startTime, endTime);
+        List<Date> dateNeededToBeRemoved = new ArrayList<>();
+        for (Map.Entry<Date, Long> entry : combinedScreenOffTimeAndDuration.entrySet()) {
+            if (entry.getValue() <= 1000) {
+                RealmResults<ScreenOpsRecord> previousScreenOpsRecords = realm.where(ScreenOpsRecord.class)
+                        .lessThan("time", entry.getKey())
+                        .findAllSorted("time", Sort.DESCENDING);
+                Logger.v("previousScreenOpsRecords: " + previousScreenOpsRecords);
+                if (previousScreenOpsRecords.size() >= 1) {
+                    ScreenOpsRecord lastScreenOpsRecord = previousScreenOpsRecords.get(0);
+                    combinedScreenOffTimeAndDuration.put(lastScreenOpsRecord.getTime(), combinedScreenOffTimeAndDuration.get(lastScreenOpsRecord.getTime()) + entry.getValue());
+                    dateNeededToBeRemoved.add(entry.getKey());
+                }
+            }
+        }
+        if (!dateNeededToBeRemoved.isEmpty()) {
+            for (Date keyDate : dateNeededToBeRemoved) {
+                combinedScreenOffTimeAndDuration.remove(keyDate);
+            }
+        }
+        Logger.v("combinedScreenOffTimeAndDuration: " + combinedScreenOffTimeAndDuration);
+        return combinedScreenOffTimeAndDuration;
+    }
+
+
+    /**
+     * remove repeating operations (e.g. on1/on2/on3/off1 -> on1/off1) in time range
+     *
+     * @param realm     Realm
+     * @param startTime start time
+     * @param endTime   end time
+     * @return RealmResults which is lazy (i.e. can be modified directly)
+     */
     public static RealmResults<ScreenOpsRecord> removeRepeatingOperationsInTimeRange(Realm realm, Date startTime, Date endTime) {
         RealmResults<ScreenOpsRecord> allThisSleepCycleRecord = realm.where(ScreenOpsRecord.class)
                 .greaterThanOrEqualTo("time", startTime)
@@ -124,6 +175,7 @@ public class GlobalFunction {
 
     /**
      * Call isPossibleSleepTime() with current time
+     *
      * @param context Context (preferably application context)
      * @return isPossibleSleepTime()
      */
@@ -134,15 +186,15 @@ public class GlobalFunction {
 
     /**
      * If a time is possible sleep time (NOTE: return true if user haven't waken up (turn on screen) yet)
+     *
      * @param inputTime input time (Date)
-     * @param context Context (preferably application context)
+     * @param context   Context (preferably application context)
      * @return boolean
      */
     public static boolean isPossibleSleepTime(Date inputTime, Context context) {
         // Tell user the earlier the better if he/she is not sure about the max. sleep time range
 
         // Have to check if it's morning and don't start service (seemly done)
-
 
 
         Date sleepTime = parseTime(PreferencesHelper.getSleepTimeString(context));
@@ -165,8 +217,9 @@ public class GlobalFunction {
 
     /**
      * If a time is possible sleep time (unlike isPossibleSleepTime, its return value is completely based on sleepTime & wakeTime)
+     *
      * @param currentTime current time (Date)
-     * @param context Context (preferably application context)
+     * @param context     Context (preferably application context)
      * @return boolean
      */
     public static boolean isRealSleepTime(Date currentTime, Context context) {
@@ -187,6 +240,7 @@ public class GlobalFunction {
 
     /**
      * Convert time (String) into Date object
+     *
      * @param timeString format: 09:00
      * @return Date object's date will be 01/01/1970
      */
@@ -201,6 +255,7 @@ public class GlobalFunction {
 
     /**
      * Get current time (String)
+     *
      * @return String (Format: 09:00)
      */
     public static String getCurrentTimeString() {
