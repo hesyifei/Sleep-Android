@@ -55,7 +55,7 @@ public class ScreenReceiver extends BroadcastReceiver {
         if (GlobalFunction.isCurrentTimePossibleSleepTime(context)) {
 
             ScreenOpsRecord record = new ScreenOpsRecord();
-            record.setOperations(isScreenOn ? "on" : "off");
+            record.setOperation(isScreenOn ? "on" : "off");
             record.setTime(new Date());
 
             realm.beginTransaction();
@@ -101,7 +101,7 @@ public class ScreenReceiver extends BroadcastReceiver {
                 realm.beginTransaction();
 
                 ScreenOpsRecord previousRecord = realm.where(ScreenOpsRecord.class)
-                        .equalTo("operations", "on")
+                        .equalTo("operation", "on")
                         .findAllSorted("time", Sort.DESCENDING)
                         .first();
 

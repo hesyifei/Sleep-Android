@@ -9,19 +9,18 @@ import io.realm.RealmObject;
  */
 public class ScreenOpsRecord extends RealmObject {
 
-    // TODO: Change operations to operation
-    private String operations;
+    private String operation;
     private Date time;
 
     private boolean isLastRecord;
 
 
-    public String getOperations() {
-        return operations;
+    public String getOperation() {
+        return operation;
     }
 
-    public void setOperations(String operations) {
-        this.operations = operations;
+    public void setOperation(String operation) {
+        this.operation = operation;
     }
 
     public Date getTime() {
