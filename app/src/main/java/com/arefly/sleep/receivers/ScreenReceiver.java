@@ -98,14 +98,15 @@ public class ScreenReceiver extends BroadcastReceiver {
                 mNotificationManager.notify(1, notification);
 
 
-                realm.beginTransaction();
-
                 ScreenOpsRecord previousRecord = realm.where(ScreenOpsRecord.class)
                         .equalTo("operation", "on")
                         .findAllSorted("time", Sort.DESCENDING)
                         .first();
-
                 Logger.v("previousRecord: " + previousRecord);
+
+                realm.beginTransaction();
+
+                // Can simply set as realm object is lazy
                 previousRecord.setLastRecord(true);
 
                 realm.commitTransaction();
