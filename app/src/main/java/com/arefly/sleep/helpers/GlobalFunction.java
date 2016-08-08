@@ -13,8 +13,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -51,6 +53,34 @@ public class GlobalFunction {
         }
 
         Logger.v("isWakenUp: " + PreferencesHelper.getIsWakenUpBool(context));
+    }
+
+
+    public static Map<Date, Long> getScreenOffTimeAndDuration(Realm realm, Date startTime, Date endTime) {
+        RealmResults<ScreenOpsRecord> allThisSleepCycleOffRecord = realm.where(ScreenOpsRecord.class)
+                .greaterThanOrEqualTo("time", startTime)
+                .lessThanOrEqualTo("time", endTime)
+                .equalTo("operation", "off")
+                .findAllSorted("time", Sort.ASCENDING);
+        Logger.v("allThisSleepCycleOffRecord: " + allThisSleepCycleOffRecord);
+
+        RealmResults<ScreenOpsRecord> allThisSleepCycleOnRecord = realm.where(ScreenOpsRecord.class)
+                .greaterThanOrEqualTo("time", allThisSleepCycleOffRecord.get(0).getTime())
+                .lessThanOrEqualTo("time", endTime)
+                .equalTo("operation", "on")
+                .findAllSorted("time", Sort.ASCENDING);
+        Logger.v("allThisSleepCycleOnRecord: " + allThisSleepCycleOnRecord);
+
+        Map<Date, Long> screenOffTimeAndDuration = new HashMap<>();
+        for (int i = 0; i < allThisSleepCycleOffRecord.size(); i++) {
+            ScreenOpsRecord eachOffRecord = allThisSleepCycleOffRecord.get(i);
+            ScreenOpsRecord eachOnRecord = allThisSleepCycleOnRecord.get(i);
+            long timeDiff = eachOnRecord.getTime().getTime() - eachOffRecord.getTime().getTime();       // First getTime() is from class ScreenOpsRecord
+            Logger.v("timeDiff: " + timeDiff);
+            screenOffTimeAndDuration.put(eachOffRecord.getTime(), timeDiff);
+        }
+        Logger.e("screenOffTimeAndDuration: " + screenOffTimeAndDuration);
+        return screenOffTimeAndDuration;
     }
 
 
