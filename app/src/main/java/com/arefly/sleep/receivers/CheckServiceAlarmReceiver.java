@@ -46,8 +46,8 @@ public class CheckServiceAlarmReceiver extends BroadcastReceiver {
         Date currentTime = GlobalFunction.parseTime(GlobalFunction.getCurrentTimeString());
         Date sleepTime = GlobalFunction.parseTime(PreferencesHelper.getSleepTimeString(context));
 
-        Calendar sleepTimeCalendar = GregorianCalendar.getInstance();   // Date is 1/1/1970 here
-        sleepTimeCalendar.setTime(sleepTime);   // assigns calendar to given date
+        Calendar sleepTimeCalendar = GregorianCalendar.getInstance();
+        sleepTimeCalendar.setTime(sleepTime);   // Date is 1/1/1970 here
 
         Calendar calendar = GregorianCalendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());

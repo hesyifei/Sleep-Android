@@ -27,8 +27,8 @@ public class StatisticActivity extends AppCompatActivity {
 
         initServiceAndAlarm(getApplicationContext());
 
-        PreferencesHelper.setSleepTimeString("14:39", this.getApplicationContext());
-        PreferencesHelper.setWakeTimeString("14:40", this.getApplicationContext());
+        PreferencesHelper.setSleepTimeString("09:00", this.getApplicationContext());
+        PreferencesHelper.setWakeTimeString("02:00", this.getApplicationContext());
     }
 
 
@@ -51,13 +51,19 @@ public class StatisticActivity extends AppCompatActivity {
         }
 
 
+
+        // REAL USE:
+        checkServiceAlarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, checkServiceAlarmIntent);
+
+
+        // FOR TESTING ONLY:
         /*Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, 13);
-        calendar.set(Calendar.MINUTE, 45);*/
+        calendar.set(Calendar.MINUTE, 45);
         //checkServiceAlarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, checkServiceAlarmIntent);
-        checkServiceAlarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, checkServiceAlarmIntent);
-        //checkServiceAlarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 6000, checkServiceAlarmIntent);
+        //checkServiceAlarmMgr.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 6000, checkServiceAlarmIntent);*/
         //checkServiceAlarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 6000, checkServiceAlarmIntent);
+        //checkServiceAlarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), 15000, checkServiceAlarmIntent);
     }
 }
