@@ -15,9 +15,9 @@ import com.arefly.sleep.helpers.GlobalFunction;
 import com.arefly.sleep.helpers.PreferencesHelper;
 import com.orhanobut.logger.Logger;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -104,7 +104,7 @@ public class ScreenReceiver extends BroadcastReceiver {
                 ScreenOpsRecord endRecord = realm.where(ScreenOpsRecord.class)
                         .equalTo("operation", "on")
                         .findAllSorted("time", Sort.DESCENDING)
-                        .first();
+                        .get(0);
                 Logger.v("endRecord: " + endRecord);
 
                 realm.beginTransaction();
@@ -137,7 +137,52 @@ public class ScreenReceiver extends BroadcastReceiver {
                 Logger.v("startRecord: " + startRecord);
 
 
-                GlobalFunction.removeRepeatingOperationsInTimeRange(realm, startRecord.getTime(), endRecord.getTime());
+                Date startTime = startRecord.getTime();
+                Date endTime = endRecord.getTime();
+
+
+                GlobalFunction.removeRepeatingOperationsInTimeRange(realm, startTime, endTime);
+
+
+                RealmResults<ScreenOpsRecord> allThisSleepCycleOffRecord = realm.where(ScreenOpsRecord.class)
+                        .greaterThanOrEqualTo("time", startTime)
+                        .lessThanOrEqualTo("time", endTime)
+                        .equalTo("operation", "off")
+                        .findAllSorted("time", Sort.ASCENDING);
+                Logger.v("allThisSleepCycleOffRecord: " + allThisSleepCycleOffRecord);
+
+
+                RealmResults<ScreenOpsRecord> allThisSleepCycleOnRecord = realm.where(ScreenOpsRecord.class)
+                        .greaterThanOrEqualTo("time", allThisSleepCycleOffRecord.get(0).getTime())
+                        .lessThanOrEqualTo("time", endTime)
+                        .equalTo("operation", "on")
+                        .findAllSorted("time", Sort.ASCENDING);
+                Logger.v("allThisSleepCycleOnRecord: " + allThisSleepCycleOnRecord);
+
+
+                Map<Date, Long> screenOffTimeAndSleepDuration = new HashMap<>();
+                for (int i = 0; i < allThisSleepCycleOffRecord.size(); i++) {
+                    ScreenOpsRecord eachOffRecord = allThisSleepCycleOffRecord.get(i);
+                    ScreenOpsRecord eachOnRecord = allThisSleepCycleOnRecord.get(i);
+                    long timeDiff = eachOnRecord.getTime().getTime() - eachOffRecord.getTime().getTime();       // First getTime() is from class ScreenOpsRecord
+                    Logger.v("timeDiff: " + timeDiff);
+                    screenOffTimeAndSleepDuration.put(eachOffRecord.getTime(), timeDiff);
+                }
+                Logger.e("screenOffTimeAndSleepDuration: " + screenOffTimeAndSleepDuration);
+
+
+                Map.Entry<Date, Long> maxSleepDurationEntry = null;
+                for (Map.Entry<Date, Long> entry : screenOffTimeAndSleepDuration.entrySet()) {
+                    if (maxSleepDurationEntry == null || entry.getValue().compareTo(maxSleepDurationEntry.getValue()) >= 0) {
+                        maxSleepDurationEntry = entry;
+                    }
+                }
+
+                Logger.e("maxSleepDurationEntry: " + maxSleepDurationEntry);
+
+                // getAllDuration
+                // getCombinedDuration
+
 
             }
         }
