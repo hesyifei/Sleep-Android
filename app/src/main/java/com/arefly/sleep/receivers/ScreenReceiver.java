@@ -18,6 +18,7 @@ import com.orhanobut.logger.Logger;
 import java.util.Date;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 import io.realm.Sort;
 
 /**
@@ -98,20 +99,49 @@ public class ScreenReceiver extends BroadcastReceiver {
                 mNotificationManager.notify(1, notification);
 
 
-                ScreenOpsRecord previousRecord = realm.where(ScreenOpsRecord.class)
+                ScreenOpsRecord endRecord = realm.where(ScreenOpsRecord.class)
                         .equalTo("operation", "on")
                         .findAllSorted("time", Sort.DESCENDING)
                         .first();
-                Logger.v("previousRecord: " + previousRecord);
+                Logger.v("endRecord: " + endRecord);
 
                 realm.beginTransaction();
 
                 // Can simply set as realm object is lazy
-                previousRecord.setLastRecord(true);
+                endRecord.setLastRecord(true);
 
                 realm.commitTransaction();
 
-                Logger.v("previousRecord (new): " + previousRecord);
+                Logger.v("endRecord (new): " + endRecord);
+
+
+                RealmResults<ScreenOpsRecord> allIsLastRecord = realm.where(ScreenOpsRecord.class)
+                        .equalTo("isLastRecord", true)
+                        .findAllSorted("time", Sort.DESCENDING);
+                Logger.v("allIsLastRecord: " + allIsLastRecord);
+                Logger.v("allIsLastRecord.size(): " + allIsLastRecord.size());
+
+                ScreenOpsRecord startRecord;
+                if (allIsLastRecord.size() <= 1) {
+                    // If only 1 (0 is impossible) "isLastRecord" record is found (i.e. it is the first time user wakes up after installing this app)
+                    startRecord = realm.where(ScreenOpsRecord.class)
+                            .findAllSorted("time", Sort.ASCENDING)
+                            .get(0);
+                } else {
+                    Date secondLastIsLastRecordTime = allIsLastRecord.get(1).getTime();
+                    startRecord = realm.where(ScreenOpsRecord.class)
+                            .greaterThan("time", secondLastIsLastRecordTime)
+                            .findAllSorted("time", Sort.ASCENDING)
+                            .get(0);
+                }
+                Logger.v("startRecord: " + startRecord);
+
+
+                RealmResults<ScreenOpsRecord> allThisSleepCycleRecord = realm.where(ScreenOpsRecord.class)
+                        .greaterThanOrEqualTo("time", startRecord.getTime())
+                        .lessThanOrEqualTo("time", endRecord.getTime())
+                        .findAllSorted("time", Sort.ASCENDING);
+                Logger.v("allThisSleepCycleRecord: " + allThisSleepCycleRecord);
 
             }
         }
