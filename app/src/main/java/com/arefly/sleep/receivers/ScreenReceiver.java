@@ -18,8 +18,7 @@ import com.orhanobut.logger.Logger;
 import java.util.Date;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by eflyjason on 3/8/2016.
@@ -49,7 +48,9 @@ public class ScreenReceiver extends BroadcastReceiver {
 
     public static void saveLockData(boolean isScreenOn, Context context) {
         Logger.d("saveLockData(" + isScreenOn + ") called");
-        // Have to judge if current time is inside range of max. sleep time as this method is call-on-boot (seemly done)
+        // TODO: Have to judge if current time is inside range of max. sleep time as this method is call-on-boot (seemly done)
+
+        Realm realm = Realm.getDefaultInstance();
 
         if (GlobalFunction.isCurrentTimePossibleSleepTime(context)) {
 
@@ -57,33 +58,21 @@ public class ScreenReceiver extends BroadcastReceiver {
             record.setOperations(isScreenOn ? "on" : "off");
             record.setTime(new Date());
 
-            // Create a RealmConfiguration that saves the Realm file in the app's "files" directory.
-            RealmConfiguration realmConfig = new RealmConfiguration.Builder(context).build();
-            Realm.setDefaultConfiguration(realmConfig);
-
-            Realm realm = Realm.getDefaultInstance();
-
             realm.beginTransaction();
-            //realm.delete(ScreenOpsRecord.class);
+            //realm.delete(ScreenOpsRecord.class);      // FOR DEBUGGING ONLY
             ScreenOpsRecord realmRecord = realm.copyToRealm(record);
             realm.commitTransaction();
             Logger.d("realmRecord saved: " + realmRecord);
 
-
-            RealmResults<ScreenOpsRecord> result2 = realm.where(ScreenOpsRecord.class)
-                    .findAll();
-
-            //Logger.d(result2);
         } else {
             Logger.v("isCurrentTimePossibleSleepTime = false: do nothing");
         }
 
 
-
         Date currentTime = GlobalFunction.parseTime(GlobalFunction.getCurrentTimeString());
         if (!GlobalFunction.isRealSleepTime(currentTime, context)) {
             if (isScreenOn) {
-                Logger.i("!isRealSleepTime + isScreenOn = isWakenUp + stopService");
+                Logger.i("[Should called once only] !isRealSleepTime + isScreenOn = isWakenUp + stopService");
                 PreferencesHelper.setIsWakenUpBool(true, context);
                 GlobalFunction.startOrStopScreenServiceIntent(context);
 
@@ -107,9 +96,26 @@ public class ScreenReceiver extends BroadcastReceiver {
                 NotificationManager mNotificationManager =
                         (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 mNotificationManager.notify(1, notification);
+
+
+                realm.beginTransaction();
+
+                ScreenOpsRecord previousRecord = realm.where(ScreenOpsRecord.class)
+                        .equalTo("operations", "on")
+                        .findAllSorted("time", Sort.DESCENDING)
+                        .first();
+
+                Logger.v("previousRecord: " + previousRecord);
+                previousRecord.setLastRecord(true);
+
+                realm.commitTransaction();
+
+                Logger.v("previousRecord (new): " + previousRecord);
+
             }
         }
 
+        realm.close();
 
 
     }
