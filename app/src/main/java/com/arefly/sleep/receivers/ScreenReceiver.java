@@ -15,7 +15,9 @@ import com.arefly.sleep.helpers.GlobalFunction;
 import com.arefly.sleep.helpers.PreferencesHelper;
 import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -142,6 +144,32 @@ public class ScreenReceiver extends BroadcastReceiver {
                         .lessThanOrEqualTo("time", endRecord.getTime())
                         .findAllSorted("time", Sort.ASCENDING);
                 Logger.v("allThisSleepCycleRecord: " + allThisSleepCycleRecord);
+
+
+                List<Integer> locationNeededToBeRemoved = new ArrayList<>();
+                for (int i = 0; i < allThisSleepCycleRecord.size(); i++) {
+                    ScreenOpsRecord eachRecord = allThisSleepCycleRecord.get(i);
+                    Logger.v("allThisSleepCycleRecordArray[" + i + "]: " + eachRecord);
+                    if (i + 1 <= allThisSleepCycleRecord.size() - 1) {
+                        // If have next record
+                        ScreenOpsRecord nextRecord = allThisSleepCycleRecord.get(i + 1);
+                        String eachRecordOperation = eachRecord.getOperation();
+                        String nextRecordOperation = nextRecord.getOperation();
+                        if ((eachRecordOperation.equals("on") && !nextRecordOperation.equals("off"))
+                                || (eachRecordOperation.equals("off") && !nextRecordOperation.equals("on"))) {
+                            locationNeededToBeRemoved.add(i);
+                        }
+                    }
+                }
+                Logger.v("locationNeededToBeRemoved: " + locationNeededToBeRemoved);
+                if (!locationNeededToBeRemoved.isEmpty()) {
+                    realm.beginTransaction();
+                    for (Integer locationInteger : locationNeededToBeRemoved) {
+                        allThisSleepCycleRecord.deleteFromRealm(locationInteger);
+                    }
+                    realm.commitTransaction();
+                    Logger.v("locationNeededToBeRemoved removed from realm. allThisSleepCycleRecord: " + allThisSleepCycleRecord);
+                }
 
             }
         }
