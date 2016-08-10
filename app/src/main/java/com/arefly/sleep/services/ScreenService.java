@@ -11,7 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 
 import com.arefly.sleep.R;
-import com.arefly.sleep.activities.StatisticActivity;
+import com.arefly.sleep.activities.OverviewActivity;
 import com.arefly.sleep.receivers.ScreenReceiver;
 import com.orhanobut.logger.Logger;
 
@@ -27,8 +27,7 @@ public class ScreenService extends Service {
         super.onCreate();
         Logger.i("ScreenService onCreate()");
 
-        // TODO: Change StatisticActivity to YesterdayActivity
-        Intent notificationIntent = new Intent(this, StatisticActivity.class);
+        Intent notificationIntent = new Intent(this, OverviewActivity.class);
         PendingIntent notificationPendingIntent = PendingIntent.getActivity(this, 0,
                 notificationIntent, 0);
 

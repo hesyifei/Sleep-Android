@@ -7,7 +7,7 @@ import android.os.Build;
 import android.os.PowerManager;
 
 import com.arefly.sleep.R;
-import com.arefly.sleep.activities.StatisticActivity;
+import com.arefly.sleep.activities.OverviewActivity;
 import com.orhanobut.logger.Logger;
 
 /**
@@ -20,7 +20,7 @@ public class BootReceiver extends BroadcastReceiver {
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED) || intent.getAction().equals(context.getResources().getString(R.string.htc_action_quickboot_poweron))) {
             Logger.v("ACTION_BOOT_COMPLETED || QUICKBOOT_POWERON");
 
-            StatisticActivity.initServiceAndAlarm(context.getApplicationContext());
+            OverviewActivity.initServiceAndAlarm(context.getApplicationContext());
 
             PowerManager powerManager = (PowerManager) context.getApplicationContext().getSystemService(Context.POWER_SERVICE);
             boolean isScreenOn = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH&&powerManager.isInteractive() || Build.VERSION.SDK_INT<Build.VERSION_CODES.KITKAT_WATCH&&powerManager.isScreenOn();

@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
 
 import com.arefly.sleep.R;
-import com.arefly.sleep.activities.StatisticActivity;
+import com.arefly.sleep.activities.OverviewActivity;
 import com.arefly.sleep.data.objects.ScreenOpsRecord;
 import com.arefly.sleep.helpers.GlobalFunction;
 import com.arefly.sleep.helpers.PreferencesHelper;
@@ -135,8 +135,7 @@ public class ScreenReceiver extends BroadcastReceiver {
                 long sleepHours = TimeUnit.MILLISECONDS.toHours(sleepMilliseconds);
                 long sleepMinutes = TimeUnit.MILLISECONDS.toMinutes(sleepMilliseconds);
 
-                // TODO: Change StatisticActivity to YesterdayActivity
-                Intent notificationIntent = new Intent(context, StatisticActivity.class);
+                Intent notificationIntent = new Intent(context, OverviewActivity.class);
                 PendingIntent notificationPendingIntent = PendingIntent.getActivity(context, 0,
                         notificationIntent, 0);
 

@@ -17,18 +17,18 @@ import com.orhanobut.logger.Logger;
 /**
  * Created by eflyjason on 3/8/2016.
  */
-public class StatisticActivity extends AppCompatActivity {
+public class OverviewActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Logger.i("StatisticActivity onCreate()");
-        setContentView(R.layout.activity_statistic);
+        Logger.i("OverviewActivity onCreate()");
+        setContentView(R.layout.activity_overview);
 
         initServiceAndAlarm(getApplicationContext());
 
-        PreferencesHelper.setSleepTimeString("09:00", this.getApplicationContext());
-        PreferencesHelper.setWakeTimeString("02:00", this.getApplicationContext());
+        PreferencesHelper.setSleepTimeString("22:00", this.getApplicationContext());
+        PreferencesHelper.setWakeTimeString("09:00", this.getApplicationContext());
     }
 
 
