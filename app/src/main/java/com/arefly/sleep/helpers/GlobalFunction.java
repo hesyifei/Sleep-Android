@@ -126,6 +126,23 @@ public class GlobalFunction {
         return combinedScreenOffTimeAndDuration;
     }
 
+    /**
+     * get max sleep duration entry
+     * @param screenOffTimeAndDuration screen off time (Date) and duration(Long) in Map
+     * @return max sleep duration in Map.Entry
+     */
+    public static Map.Entry getMaxSleepDurationEntry(Map<Date, Long> screenOffTimeAndDuration) {
+        // http://stackoverflow.com/a/5911199/2603230
+        Map.Entry<Date, Long> maxSleepDurationEntry = null;
+        for (Map.Entry<Date, Long> entry : screenOffTimeAndDuration.entrySet()) {
+            if (maxSleepDurationEntry == null || entry.getValue().compareTo(maxSleepDurationEntry.getValue()) >= 0) {
+                maxSleepDurationEntry = entry;
+            }
+        }
+        Logger.e("maxSleepDurationEntry: " + maxSleepDurationEntry);
+        return maxSleepDurationEntry;
+    }
+
 
     /**
      * remove repeating operations (e.g. on1/on2/on3/off1 -> on1/off1) in time range

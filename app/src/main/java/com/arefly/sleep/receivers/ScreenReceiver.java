@@ -17,6 +17,7 @@ import com.orhanobut.logger.Logger;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -78,27 +79,6 @@ public class ScreenReceiver extends BroadcastReceiver {
                 PreferencesHelper.setIsWakenUpBool(true, context);
                 GlobalFunction.startOrStopScreenServiceIntent(context);
 
-                // TODO: Change StatisticActivity to YesterdayActivity
-                Intent notificationIntent = new Intent(context, StatisticActivity.class);
-                PendingIntent notificationPendingIntent = PendingIntent.getActivity(context, 0,
-                        notificationIntent, 0);
-
-                Notification notification = new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText("早安\n\n\n長文字"))
-                        .setContentTitle("早安")
-                        .setContentText("輕觸查看詳細信息")
-                        .setContentIntent(notificationPendingIntent)
-                        .setDefaults(Notification.DEFAULT_ALL)
-                        .setPriority(Notification.PRIORITY_DEFAULT)
-                        .setCategory(Notification.CATEGORY_EVENT)
-                        .setAutoCancel(true)
-                        .build();
-                NotificationManager mNotificationManager =
-                        (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.notify(1, notification);
-
 
                 ScreenOpsRecord endRecord = realm.where(ScreenOpsRecord.class)
                         .equalTo("operation", "on")
@@ -139,32 +119,52 @@ public class ScreenReceiver extends BroadcastReceiver {
                 Date startTime = startRecord.getTime();
                 Date endTime = endRecord.getTime();
 
-
                 GlobalFunction.removeRepeatingOperationsInTimeRange(realm, startTime, endTime);
 
+
+                // Maybe no use here
                 Map<Date, Long> screenOffTimeAndDuration = GlobalFunction.getScreenOffTimeAndDuration(realm, startTime, endTime);
 
                 Map<Date, Long> combinedScreenOffTimeAndDuration = GlobalFunction.getCombinedScreenOffTimeAndDuration(realm, startTime, endTime);
 
 
-                // http://stackoverflow.com/a/5911199/2603230
-                Map.Entry<Date, Long> maxSleepDurationEntry = null;
-                for (Map.Entry<Date, Long> entry : screenOffTimeAndDuration.entrySet()) {
-                    if (maxSleepDurationEntry == null || entry.getValue().compareTo(maxSleepDurationEntry.getValue()) >= 0) {
-                        maxSleepDurationEntry = entry;
-                    }
-                }
-                Logger.e("maxSleepDurationEntry: " + maxSleepDurationEntry);
+                Map.Entry maxSleepDurationEntry = GlobalFunction.getMaxSleepDurationEntry(combinedScreenOffTimeAndDuration);
 
-                // getAllDuration
-                // getCombinedDuration
 
+                long sleepMilliseconds = (long) maxSleepDurationEntry.getValue();
+                long sleepHours = TimeUnit.MILLISECONDS.toHours(sleepMilliseconds);
+                long sleepMinutes = TimeUnit.MILLISECONDS.toMinutes(sleepMilliseconds);
+
+                // TODO: Change StatisticActivity to YesterdayActivity
+                Intent notificationIntent = new Intent(context, StatisticActivity.class);
+                PendingIntent notificationPendingIntent = PendingIntent.getActivity(context, 0,
+                        notificationIntent, 0);
+
+                String notificationTitle = "早安";
+                String notificationText = "你昨天睡了" + sleepHours + "小時" + sleepMinutes + "分鐘!";
+                String notificationLongText = "早安\n\n長文字\n\n輕觸查看詳細信息";
+
+                Notification morningNotification = new NotificationCompat.Builder(context)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setStyle(new NotificationCompat.BigTextStyle()
+                                .bigText(notificationLongText))
+                        .setContentTitle(notificationTitle)
+                        .setContentText(notificationText)
+                        .setContentIntent(notificationPendingIntent)
+                        .setDefaults(Notification.DEFAULT_ALL)
+                        .setPriority(Notification.PRIORITY_DEFAULT)
+                        .setCategory(Notification.CATEGORY_EVENT)
+                        .setAutoCancel(true)
+                        .build();
+                NotificationManager morningNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                morningNotificationManager.notify(1, morningNotification);
+
+                Logger.v("morningNotificationManager shown: \nTitle: " + notificationTitle + "\nText: " + notificationText + "\nLong text: " + notificationLongText);
 
             }
         }
 
         realm.close();
-
 
     }
 
