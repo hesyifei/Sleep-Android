@@ -4,15 +4,24 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 
-import com.arefly.sleep.receivers.CheckServiceAlarmReceiver;
+import com.arefly.sleep.R;
+import com.arefly.sleep.adapters.TabPagerAdapter;
+import com.arefly.sleep.fragments.StatisticsFragment;
 import com.arefly.sleep.helpers.GlobalFunction;
 import com.arefly.sleep.helpers.PreferencesHelper;
-import com.arefly.sleep.R;
+import com.arefly.sleep.receivers.CheckServiceAlarmReceiver;
 import com.orhanobut.logger.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by eflyjason on 3/8/2016.
@@ -24,6 +33,33 @@ public class OverviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Logger.i("OverviewActivity onCreate()");
         setContentView(R.layout.activity_overview);
+
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
+        List<Fragment> fragments = new ArrayList<>();
+        List<String> titles = new ArrayList<>();
+
+        //fragments.add(StatisticsFragment.newInstance(""));
+
+        fragments.add(new StatisticsFragment());
+        titles.add("SSS");
+
+        fragments.add(new StatisticsFragment());
+        titles.add("woho");
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
+        if (viewPager != null) {
+            viewPager.setAdapter(new TabPagerAdapter(getSupportFragmentManager(), titles, fragments, this));
+        }
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        if (tabLayout != null) {
+            tabLayout.setupWithViewPager(viewPager);
+        }
+
 
         initServiceAndAlarm(getApplicationContext());
 

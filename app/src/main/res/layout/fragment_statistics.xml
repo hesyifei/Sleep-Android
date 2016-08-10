@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        style="@style/FullPageWidthViewWithPadding"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/colorPrimaryDark">
+
+        <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/general_statistic_upper_label_small"
+                style="@style/GeneralStatisticLabel"
+                android:layout_alignParentTop="true"
+                android:text="small"
+                app:layout_heightPercent="25%"
+                app:layout_widthPercent="60%" />
+
+            <TextView
+                android:id="@+id/general_statistic_upper_label"
+                style="@style/GeneralStatisticLabel"
+                android:layout_below="@id/general_statistic_upper_label_small"
+                android:text="BIG"
+                app:layout_heightPercent="35%"
+                app:layout_widthPercent="60%" />
+
+            <TextView
+                android:id="@+id/general_statistic_lower_left_label_small"
+                style="@style/GeneralStatisticLabel"
+                android:layout_below="@id/general_statistic_upper_label"
+                android:text="left small"
+                app:layout_heightPercent="15%"
+                app:layout_widthPercent="50%" />
+
+            <TextView
+                android:id="@+id/general_statistic_lower_left_label"
+                style="@style/GeneralStatisticLabel"
+                android:layout_below="@id/general_statistic_lower_left_label_small"
+                android:text="left BIG"
+                app:layout_heightPercent="25%"
+                app:layout_widthPercent="50%" />
+
+            <TextView
+                android:id="@+id/general_statistic_lower_right_label_small"
+                style="@style/GeneralStatisticLabel"
+                android:layout_below="@id/general_statistic_upper_label"
+                android:layout_toEndOf="@id/general_statistic_lower_left_label_small"
+                android:layout_toRightOf="@id/general_statistic_lower_left_label_small"
+                android:text="right small"
+                app:layout_heightPercent="15%"
+                app:layout_widthPercent="50%" />
+
+            <TextView
+                android:id="@+id/general_statistic_lower_right_label"
+                style="@style/GeneralStatisticLabel"
+                android:layout_below="@id/general_statistic_lower_right_label_small"
+                android:layout_toEndOf="@id/general_statistic_lower_left_label"
+                android:layout_toRightOf="@id/general_statistic_lower_left_label"
+                android:text="right BIG"
+                app:layout_heightPercent="25%"
+                app:layout_widthPercent="50%" />
+
+        </android.support.percent.PercentRelativeLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/FullPageWidthViewWithPadding"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:background="@color/colorPrimaryLight" />
+
+</LinearLayout>

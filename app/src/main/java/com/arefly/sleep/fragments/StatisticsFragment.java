@@ -1,0 +1,40 @@
+package com.arefly.sleep.fragments;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.arefly.sleep.R;
+import com.orhanobut.logger.Logger;
+
+/**
+ * Created by eflyjason on 10/8/2016.
+ */
+public class StatisticsFragment extends Fragment {
+
+    /*public static StatisticsFragment newInstance(String text) {
+        Logger.i("StatisticsFragment newInstance(" + text + ")");
+
+        StatisticsFragment f = new StatisticsFragment();
+        Bundle b = new Bundle();
+        b.putString("msg", text);
+        f.setArguments(b);
+        return f;
+    }*/
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Logger.i("StatisticsFragment onCreate()");
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Logger.i("StatisticsFragment onCreateView()");
+
+        return inflater.inflate(R.layout.fragment_statistics, container, false);
+    }
+
+}
