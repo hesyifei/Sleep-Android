@@ -3,6 +3,7 @@ package com.arefly.sleep.helpers;
 import android.content.Context;
 import android.content.Intent;
 
+import com.arefly.sleep.data.helpers.ScreenOpsRecordHelper;
 import com.arefly.sleep.data.objects.ScreenOpsRecord;
 import com.arefly.sleep.services.ScreenService;
 import com.orhanobut.logger.Logger;
@@ -94,20 +95,22 @@ public class GlobalFunction {
 
 
     /**
-     * get combined screen off time and duration (i.e. remove screen off intervals which are too short)
+     * get combined screen off time and duration (i.e. remove screen off intervals which are too short (<= getLongestIgnoreSeconds))
      *
      * @param realm     Realm
      * @param startTime start time
      * @param endTime   end time
+     * @param context   Context (preferably application context)
      * @return time (Date) and duration (Long in milliseconds)
      */
-    public static Map<Date, Long> getCombinedScreenOffTimeAndDuration(Realm realm, Date startTime, Date endTime) {
-        Map<Date, Long> combinedScreenOffTimeAndDuration = getScreenOffTimeAndDuration(realm, startTime, endTime);
-        List<Date> dateNeededToBeRemoved = new ArrayList<>();
-        for (Map.Entry<Date, Long> entry : combinedScreenOffTimeAndDuration.entrySet()) {
-            if (entry.getValue() <= 1000) {
+    public static Map<Date, Long> getCombinedScreenOffTimeAndDuration(Realm realm, Date startTime, Date endTime, Context context) {
+        /*Map<Date, Long> combinedScreenOffTimeAndDuration = getScreenOffTimeAndDuration(realm, startTime, endTime);
+        List<Date> dateNeededToBeRemoved = new ArrayList<>();*/
+        /*for (Map.Entry<Date, Long> entry : combinedScreenOffTimeAndDuration.entrySet()) {
+            if (entry.getValue() <= PreferencesHelper.getLongestIgnoreSeconds(context)*1000) {
                 RealmResults<ScreenOpsRecord> previousScreenOpsRecords = realm.where(ScreenOpsRecord.class)
                         .lessThan("time", entry.getKey())
+                        .greaterThanOrEqualTo("time", startTime)
                         .findAllSorted("time", Sort.DESCENDING);
                 Logger.v("previousScreenOpsRecords: " + previousScreenOpsRecords);
                 if (previousScreenOpsRecords.size() >= 1) {
@@ -116,11 +119,124 @@ public class GlobalFunction {
                     dateNeededToBeRemoved.add(entry.getKey());
                 }
             }
+        }*/
+        /*int i = 0;
+        for (Map.Entry<Date, Long> entry : combinedScreenOffTimeAndDuration.entrySet()) {
+            if (i > 0) {
+                RealmResults<ScreenOpsRecord> previousScreenOpsRecords = realm.where(ScreenOpsRecord.class)
+                        .lessThan("time", entry.getKey())
+                        .greaterThanOrEqualTo("time", startTime)
+                        .equalTo("operation", "off")
+                        .findAllSorted("time", Sort.DESCENDING);
+                Logger.v("previousScreenOpsRecords: " + previousScreenOpsRecords);
+                if (previousScreenOpsRecords.size() >= 1) {
+                    ScreenOpsRecord lastScreenOpsRecord = previousScreenOpsRecords.get(0);
+
+                    combinedScreenOffTimeAndDuration.get
+
+                    combinedScreenOffTimeAndDuration.put(lastScreenOpsRecord.getTime(), combinedScreenOffTimeAndDuration.get(lastScreenOpsRecord.getTime()) + entry.getValue());
+                    dateNeededToBeRemoved.add(entry.getKey());
+                }
+            }*/
+
+            /*RealmResults<ScreenOpsRecord> previousScreenOpsRecords = realm.where(ScreenOpsRecord.class)
+                    .lessThan("time", entry.getKey())
+                    .greaterThanOrEqualTo("time", startTime)
+                    .findAllSorted("time", Sort.DESCENDING);
+            Logger.v("previousScreenOpsRecords: " + previousScreenOpsRecords);
+            if (previousScreenOpsRecords.size() >= 1) {
+                ScreenOpsRecord lastScreenOpsRecord = previousScreenOpsRecords.get(0);
+                combinedScreenOffTimeAndDuration.put(lastScreenOpsRecord.getTime(), combinedScreenOffTimeAndDuration.get(lastScreenOpsRecord.getTime()) + entry.getValue());
+                dateNeededToBeRemoved.add(entry.getKey());
+            }*/
+
+        /*    i++;
         }
+
         if (!dateNeededToBeRemoved.isEmpty()) {
             for (Date keyDate : dateNeededToBeRemoved) {
                 combinedScreenOffTimeAndDuration.remove(keyDate);
             }
+        }
+        Logger.v("combinedScreenOffTimeAndDuration: " + combinedScreenOffTimeAndDuration);
+        return combinedScreenOffTimeAndDuration;*/
+
+        RealmResults<ScreenOpsRecord> allThisSleepCycleOffRecordResult = realm.where(ScreenOpsRecord.class)
+                .greaterThanOrEqualTo("time", startTime)
+                .lessThanOrEqualTo("time", endTime)
+                .equalTo("operation", "off")
+                .findAllSorted("time", Sort.ASCENDING);
+        Logger.v("allThisSleepCycleOffRecordResult: " + allThisSleepCycleOffRecordResult);
+
+        RealmResults<ScreenOpsRecord> allThisSleepCycleOnRecordResult = realm.where(ScreenOpsRecord.class)
+                .greaterThanOrEqualTo("time", allThisSleepCycleOffRecordResult.get(0).getTime())
+                .lessThanOrEqualTo("time", endTime)
+                .equalTo("operation", "on")
+                .findAllSorted("time", Sort.ASCENDING);
+        Logger.v("allThisSleepCycleOnRecordResult: " + allThisSleepCycleOnRecordResult);
+
+        List<ScreenOpsRecord> allThisSleepCycleOffRecordList = realm.copyFromRealm(allThisSleepCycleOffRecordResult);
+        Logger.v("allThisSleepCycleOffRecordList: " + ScreenOpsRecordHelper.printScreenOpsRecords(allThisSleepCycleOffRecordList));
+        List<ScreenOpsRecord> allThisSleepCycleOnRecordList = realm.copyFromRealm(allThisSleepCycleOnRecordResult);
+        Logger.v("allThisSleepCycleOnRecordList: " + ScreenOpsRecordHelper.printScreenOpsRecords(allThisSleepCycleOnRecordList));
+
+
+        List<ScreenOpsRecord> screenOpsRecordOnNeededToBeRemoved = new ArrayList<>();
+        List<ScreenOpsRecord> screenOpsRecordOffNeededToBeRemoved = new ArrayList<>();
+
+        // reverse the loop
+        for (int i = allThisSleepCycleOffRecordList.size() - 1; i >= 0; i--) {
+            ScreenOpsRecord eachOffRecord = allThisSleepCycleOffRecordList.get(i);
+            Logger.v("allThisSleepCycleOffRecordList[" + i + "]: " + ScreenOpsRecordHelper.printScreenOpsRecord(eachOffRecord));
+            ScreenOpsRecord eachOnRecord = allThisSleepCycleOnRecordList.get(i);
+            Logger.v("allThisSleepCycleOnRecordList[" + i + "]: " + ScreenOpsRecordHelper.printScreenOpsRecord(eachOnRecord));
+
+            long timeDiff = eachOnRecord.getTime().getTime() - eachOffRecord.getTime().getTime();       // First getTime() is from class ScreenOpsRecord
+            Logger.v("timeDiff: " + timeDiff);
+
+            if (i > 0) {
+                ScreenOpsRecord lastOffRecord = allThisSleepCycleOffRecordList.get(i - 1);
+                Logger.v("allThisSleepCycleOffRecordList[" + i + "-1]: " + ScreenOpsRecordHelper.printScreenOpsRecord(lastOffRecord));
+                ScreenOpsRecord lastOnRecord = allThisSleepCycleOnRecordList.get(i - 1);
+                Logger.v("allThisSleepCycleOnRecordList[" + i + "-1]: " + ScreenOpsRecordHelper.printScreenOpsRecord(lastOnRecord));
+
+                long thisOffToLastOnDuration = eachOffRecord.getTime().getTime() - lastOnRecord.getTime().getTime();
+                Logger.v("thisOffToLastOnDuration: " + thisOffToLastOnDuration);
+                long longestIgnoreMilliseconds = PreferencesHelper.getLongestIgnoreSeconds(context) * 1000;
+                Logger.v("longestIgnoreMilliseconds: " + longestIgnoreMilliseconds);
+                if (thisOffToLastOnDuration <= longestIgnoreMilliseconds) {
+                    // as it's copyFromRealm, it's no longer lazy (i.e. it's a new list with no connection to realm)!
+                    lastOnRecord.setTime(new Date(lastOnRecord.getTime().getTime() + timeDiff));
+                    allThisSleepCycleOnRecordList.set(i - 1, lastOnRecord);
+                    Logger.v("allThisSleepCycleOnRecordList[" + i + "-1] (modified): " + ScreenOpsRecordHelper.printScreenOpsRecord(allThisSleepCycleOnRecordList.get(i - 1)));
+
+                    screenOpsRecordOffNeededToBeRemoved.add(eachOffRecord);
+                    screenOpsRecordOnNeededToBeRemoved.add(eachOnRecord);
+                }
+            }
+
+            Logger.d("allThisSleepCycle list loop " + i + " ends\n---");
+
+        }
+
+        Logger.v("screenOpsRecordOffNeededToBeRemoved: " + ScreenOpsRecordHelper.printScreenOpsRecords(screenOpsRecordOffNeededToBeRemoved));
+        if (!screenOpsRecordOffNeededToBeRemoved.isEmpty()) {
+            allThisSleepCycleOffRecordList.removeAll(screenOpsRecordOffNeededToBeRemoved);
+        }
+
+        Logger.v("screenOpsRecordOnNeededToBeRemoved: " + ScreenOpsRecordHelper.printScreenOpsRecords(screenOpsRecordOnNeededToBeRemoved));
+        if (!screenOpsRecordOnNeededToBeRemoved.isEmpty()) {
+            allThisSleepCycleOnRecordList.removeAll(screenOpsRecordOnNeededToBeRemoved);
+        }
+
+
+        Map<Date, Long> combinedScreenOffTimeAndDuration = new HashMap<>();
+        for (int i = 0; i < allThisSleepCycleOffRecordList.size(); i++) {
+            ScreenOpsRecord eachOffRecord = allThisSleepCycleOffRecordList.get(i);
+            ScreenOpsRecord eachOnRecord = allThisSleepCycleOnRecordList.get(i);
+            long timeDiff = eachOnRecord.getTime().getTime() - eachOffRecord.getTime().getTime();       // First getTime() is from class ScreenOpsRecord
+            Logger.v("timeDiff: " + timeDiff);
+            combinedScreenOffTimeAndDuration.put(eachOffRecord.getTime(), timeDiff);
         }
         Logger.v("combinedScreenOffTimeAndDuration: " + combinedScreenOffTimeAndDuration);
         return combinedScreenOffTimeAndDuration;
@@ -128,6 +244,7 @@ public class GlobalFunction {
 
     /**
      * get max sleep duration entry
+     *
      * @param screenOffTimeAndDuration screen off time (Date) and duration(Long) in Map
      * @return max sleep duration in Map.Entry
      */
@@ -139,7 +256,7 @@ public class GlobalFunction {
                 maxSleepDurationEntry = entry;
             }
         }
-        Logger.e("maxSleepDurationEntry: " + maxSleepDurationEntry);
+        Logger.v("maxSleepDurationEntry: " + maxSleepDurationEntry);
         return maxSleepDurationEntry;
     }
 

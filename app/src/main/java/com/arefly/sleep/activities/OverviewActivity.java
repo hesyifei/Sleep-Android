@@ -65,6 +65,7 @@ public class OverviewActivity extends AppCompatActivity {
 
         PreferencesHelper.setSleepTimeString("22:00", this.getApplicationContext());
         PreferencesHelper.setWakeTimeString("09:00", this.getApplicationContext());
+        PreferencesHelper.setLongestIgnoreSeconds(60, this.getApplicationContext());
     }
 
 

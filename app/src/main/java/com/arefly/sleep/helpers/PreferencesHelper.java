@@ -28,6 +28,10 @@ public class PreferencesHelper {
         return getPreferences(context).getString(context.getResources().getString(R.string.string_earliest_wake_time), "06:00");
     }
 
+    public static long getLongestIgnoreSeconds(Context context) {
+        return getPreferences(context).getLong(context.getResources().getString(R.string.long_longest_ignore_seconds), 60);
+    }
+
 
     public static void setIsWakenUpBool(boolean isWakenUp, Context context) {
         SharedPreferences.Editor editor = getPreferences(context).edit();
@@ -44,6 +48,12 @@ public class PreferencesHelper {
     public static void setWakeTimeString(String time, Context context) {
         SharedPreferences.Editor editor = getPreferences(context).edit();
         editor.putString(context.getResources().getString(R.string.string_earliest_wake_time), time);
+        editor.apply();
+    }
+
+    public static void setLongestIgnoreSeconds(long seconds, Context context) {
+        SharedPreferences.Editor editor = getPreferences(context).edit();
+        editor.putLong(context.getResources().getString(R.string.long_longest_ignore_seconds), seconds);
         editor.apply();
     }
 

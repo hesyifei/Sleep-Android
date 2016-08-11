@@ -11,11 +11,15 @@ import android.support.v7.app.NotificationCompat;
 import com.arefly.sleep.R;
 import com.arefly.sleep.activities.OverviewActivity;
 import com.arefly.sleep.data.objects.ScreenOpsRecord;
+import com.arefly.sleep.data.objects.SleepDurationRecord;
 import com.arefly.sleep.helpers.GlobalFunction;
 import com.arefly.sleep.helpers.PreferencesHelper;
 import com.orhanobut.logger.Logger;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -123,9 +127,9 @@ public class ScreenReceiver extends BroadcastReceiver {
 
 
                 // Maybe no use here
-                Map<Date, Long> screenOffTimeAndDuration = GlobalFunction.getScreenOffTimeAndDuration(realm, startTime, endTime);
+                //Map<Date, Long> screenOffTimeAndDuration = GlobalFunction.getScreenOffTimeAndDuration(realm, startTime, endTime);
 
-                Map<Date, Long> combinedScreenOffTimeAndDuration = GlobalFunction.getCombinedScreenOffTimeAndDuration(realm, startTime, endTime);
+                Map<Date, Long> combinedScreenOffTimeAndDuration = GlobalFunction.getCombinedScreenOffTimeAndDuration(realm, startTime, endTime, context);
 
 
                 Map.Entry maxSleepDurationEntry = GlobalFunction.getMaxSleepDurationEntry(combinedScreenOffTimeAndDuration);
@@ -133,15 +137,53 @@ public class ScreenReceiver extends BroadcastReceiver {
 
                 long sleepMilliseconds = (long) maxSleepDurationEntry.getValue();
                 long sleepHours = TimeUnit.MILLISECONDS.toHours(sleepMilliseconds);
-                long sleepMinutes = TimeUnit.MILLISECONDS.toMinutes(sleepMilliseconds);
+                long sleepMinutes = TimeUnit.MILLISECONDS.toMinutes(sleepMilliseconds) - TimeUnit.HOURS.toMinutes(sleepHours);
+
+                Date sleepStartTime = (Date) maxSleepDurationEntry.getKey();
+                Date sleepEndTime = new Date(sleepStartTime.getTime() + sleepMilliseconds);
+
+
+                Calendar sleepDateCalendar = Calendar.getInstance();
+                sleepDateCalendar.setTime(startTime);
+
+                Date shouldWakeTime = GlobalFunction.parseTime(PreferencesHelper.getWakeTimeString(context));
+                Date shouldSleepTime = GlobalFunction.parseTime(PreferencesHelper.getSleepTimeString(context));
+                if (shouldWakeTime.before(shouldSleepTime)) {
+                    // Normal situation: morning wake + night sleep
+                    Calendar shouldSleepTimeCalendar = Calendar.getInstance();
+                    shouldSleepTimeCalendar.setTime(shouldSleepTime);
+                    if (sleepDateCalendar.get(Calendar.HOUR_OF_DAY) < shouldSleepTimeCalendar.get(Calendar.HOUR_OF_DAY)) {
+                        sleepDateCalendar.add(Calendar.DAY_OF_YEAR, -1);
+                    }
+                } else {
+                    // Special situation: morning sleep + night wake
+                }
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
+                String sleepDate = dateFormat.format(sleepDateCalendar.getTime());
+
+                Logger.v("sleepDate: " + sleepDate + "\nsleepMilliseconds: " + sleepMilliseconds + " (" + sleepHours + "h" + sleepMinutes + "m)\nsleepStartTime: " + sleepStartTime + "\nsleepEndTime: " + sleepEndTime);
+
+
+                SleepDurationRecord durationRecord = new SleepDurationRecord();
+                durationRecord.setDate(sleepDate);
+                durationRecord.setDuration(sleepMilliseconds);
+                durationRecord.setStartTime(sleepStartTime);
+                durationRecord.setEndTime(sleepEndTime);
+
+                realm.beginTransaction();
+                //realm.delete(SleepDurationRecord.class);      // FOR DEBUGGING ONLY
+                SleepDurationRecord realmDurationRecord = realm.copyToRealm(durationRecord);
+                realm.commitTransaction();
+                Logger.d("realmDurationRecord saved: " + realmDurationRecord);
+
 
                 Intent notificationIntent = new Intent(context, OverviewActivity.class);
                 PendingIntent notificationPendingIntent = PendingIntent.getActivity(context, 0,
                         notificationIntent, 0);
 
                 String notificationTitle = "早安";
-                String notificationText = "你昨天睡了" + sleepHours + "小時" + sleepMinutes + "分鐘!";
-                String notificationLongText = "早安\n\n長文字\n\n輕觸查看詳細信息";
+                String notificationText = "你昨天睡了" + sleepHours + "小時" + String.format(Locale.US, "%02d", sleepMinutes) + "分鐘!";
+                String notificationLongText = "早安\n\n" + notificationText + "\n\n輕觸查看詳細信息";
 
                 Notification morningNotification = new NotificationCompat.Builder(context)
                         .setSmallIcon(R.mipmap.ic_launcher)

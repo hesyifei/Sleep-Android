@@ -5,4 +5,5 @@
     <string name="bool_is_waken_up">isWakenUp</string>
     <string name="string_earliest_sleep_time">earliestSleepTime</string>
     <string name="string_earliest_wake_time">earliestWakeTime</string>
+    <string name="long_longest_ignore_seconds">longestIgnoreSeconds</string>
 </resources>
