@@ -10,6 +10,7 @@ import android.support.v7.app.NotificationCompat;
 
 import com.arefly.sleep.R;
 import com.arefly.sleep.activities.OverviewActivity;
+import com.arefly.sleep.data.helpers.ScreenOpsRecordHelper;
 import com.arefly.sleep.data.objects.ScreenOpsRecord;
 import com.arefly.sleep.data.objects.SleepDurationRecord;
 import com.arefly.sleep.helpers.GlobalFunction;
@@ -123,17 +124,17 @@ public class ScreenReceiver extends BroadcastReceiver {
                 Date startTime = startRecord.getTime();
                 Date endTime = endRecord.getTime();
 
-                GlobalFunction.removeRepeatingOperationsInTimeRange(realm, startTime, endTime);
+                ScreenOpsRecordHelper.removeRepeatingOperationsInTimeRange(realm, startTime, endTime);
 
 
                 // Maybe no use here
-                //Map<Date, Long> screenOffTimeAndDuration = GlobalFunction.getScreenOffTimeAndDuration(realm, startTime, endTime);
+                //Map<Date, Long> screenOffTimeAndDuration = ScreenOpsRecordHelper.getScreenOffTimeAndDuration(realm, startTime, endTime);
 
-                Map<Date, Long> combinedScreenOffTimeAndDuration = GlobalFunction.getCombinedScreenOffTimeAndDuration(realm, startTime, endTime, context);
+                Map<Date, Long> combinedScreenOffTimeAndDuration = ScreenOpsRecordHelper.getCombinedScreenOffTimeAndDuration(realm, startTime, endTime, context);
                 if (combinedScreenOffTimeAndDuration.isEmpty()) {
                     Logger.w("combinedScreenOffTimeAndDuration.isEmpty");
                 } else {
-                    Map.Entry maxSleepDurationEntry = GlobalFunction.getMaxSleepDurationEntry(combinedScreenOffTimeAndDuration);
+                    Map.Entry maxSleepDurationEntry = ScreenOpsRecordHelper.getMaxSleepDurationEntry(combinedScreenOffTimeAndDuration);
 
 
                     long sleepMilliseconds = (long) maxSleepDurationEntry.getValue();
