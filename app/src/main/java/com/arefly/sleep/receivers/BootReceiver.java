@@ -3,11 +3,10 @@ package com.arefly.sleep.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.os.PowerManager;
 
 import com.arefly.sleep.R;
 import com.arefly.sleep.activities.OverviewActivity;
+import com.arefly.sleep.helpers.GlobalFunction;
 import com.orhanobut.logger.Logger;
 
 /**
@@ -22,8 +21,7 @@ public class BootReceiver extends BroadcastReceiver {
 
             OverviewActivity.initServiceAndAlarm(context.getApplicationContext());
 
-            PowerManager powerManager = (PowerManager) context.getApplicationContext().getSystemService(Context.POWER_SERVICE);
-            boolean isScreenOn = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH&&powerManager.isInteractive() || Build.VERSION.SDK_INT<Build.VERSION_CODES.KITKAT_WATCH&&powerManager.isScreenOn();
+            boolean isScreenOn = GlobalFunction.isScreenOn(context.getApplicationContext());
             Logger.e("isScreenOn: " + isScreenOn);
 
             if (isScreenOn) {

@@ -2,6 +2,8 @@ package com.arefly.sleep.helpers;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.PowerManager;
 
 import com.arefly.sleep.data.helpers.ScreenOpsRecordHelper;
 import com.arefly.sleep.data.objects.ScreenOpsRecord;
@@ -67,28 +69,16 @@ public class GlobalFunction {
      * @return time (Date) and duration (Long in milliseconds)
      */
     public static Map<Date, Long> getScreenOffTimeAndDuration(Realm realm, Date startTime, Date endTime) {
-        RealmResults<ScreenOpsRecord> allThisSleepCycleOffRecord = realm.where(ScreenOpsRecord.class)
-                .greaterThanOrEqualTo("time", startTime)
-                .lessThanOrEqualTo("time", endTime)
-                .equalTo("operation", "off")
-                .findAllSorted("time", Sort.ASCENDING);
-        Logger.v("allThisSleepCycleOffRecord: " + allThisSleepCycleOffRecord);
-
-        RealmResults<ScreenOpsRecord> allThisSleepCycleOnRecord = realm.where(ScreenOpsRecord.class)
-                .greaterThanOrEqualTo("time", allThisSleepCycleOffRecord.get(0).getTime())
-                .lessThanOrEqualTo("time", endTime)
-                .equalTo("operation", "on")
-                .findAllSorted("time", Sort.ASCENDING);
-        Logger.v("allThisSleepCycleOnRecord: " + allThisSleepCycleOnRecord);
-
-        Map<Date, Long> screenOffTimeAndDuration = new HashMap<>();
-        for (int i = 0; i < allThisSleepCycleOffRecord.size(); i++) {
-            ScreenOpsRecord eachOffRecord = allThisSleepCycleOffRecord.get(i);
-            ScreenOpsRecord eachOnRecord = allThisSleepCycleOnRecord.get(i);
-            long timeDiff = eachOnRecord.getTime().getTime() - eachOffRecord.getTime().getTime();       // First getTime() is from class ScreenOpsRecord
-            Logger.v("timeDiff: " + timeDiff);
-            screenOffTimeAndDuration.put(eachOffRecord.getTime(), timeDiff);
+        RealmResults<ScreenOpsRecord> allThisSleepCycleOffRecordResult = getAllThisSleepCycleOffRecord(realm, startTime, endTime);
+        Logger.v("allThisSleepCycleOffRecordResult: " + allThisSleepCycleOffRecordResult);
+        if (allThisSleepCycleOffRecordResult.isEmpty()) {
+            return new HashMap<>();
         }
+
+        RealmResults<ScreenOpsRecord> allThisSleepCycleOnRecordResult = getAllThisSleepCycleOnRecord(realm, startTime, endTime, allThisSleepCycleOffRecordResult);
+        Logger.v("allThisSleepCycleOnRecordResult: " + allThisSleepCycleOnRecordResult);
+
+        Map<Date, Long> screenOffTimeAndDuration = convertScreenOnAndOffToScreenOffAndDuration(allThisSleepCycleOffRecordResult, allThisSleepCycleOnRecordResult);
         Logger.v("screenOffTimeAndDuration: " + screenOffTimeAndDuration);
         return screenOffTimeAndDuration;
     }
@@ -104,75 +94,14 @@ public class GlobalFunction {
      * @return time (Date) and duration (Long in milliseconds)
      */
     public static Map<Date, Long> getCombinedScreenOffTimeAndDuration(Realm realm, Date startTime, Date endTime, Context context) {
-        /*Map<Date, Long> combinedScreenOffTimeAndDuration = getScreenOffTimeAndDuration(realm, startTime, endTime);
-        List<Date> dateNeededToBeRemoved = new ArrayList<>();*/
-        /*for (Map.Entry<Date, Long> entry : combinedScreenOffTimeAndDuration.entrySet()) {
-            if (entry.getValue() <= PreferencesHelper.getLongestIgnoreSeconds(context)*1000) {
-                RealmResults<ScreenOpsRecord> previousScreenOpsRecords = realm.where(ScreenOpsRecord.class)
-                        .lessThan("time", entry.getKey())
-                        .greaterThanOrEqualTo("time", startTime)
-                        .findAllSorted("time", Sort.DESCENDING);
-                Logger.v("previousScreenOpsRecords: " + previousScreenOpsRecords);
-                if (previousScreenOpsRecords.size() >= 1) {
-                    ScreenOpsRecord lastScreenOpsRecord = previousScreenOpsRecords.get(0);
-                    combinedScreenOffTimeAndDuration.put(lastScreenOpsRecord.getTime(), combinedScreenOffTimeAndDuration.get(lastScreenOpsRecord.getTime()) + entry.getValue());
-                    dateNeededToBeRemoved.add(entry.getKey());
-                }
-            }
-        }*/
-        /*int i = 0;
-        for (Map.Entry<Date, Long> entry : combinedScreenOffTimeAndDuration.entrySet()) {
-            if (i > 0) {
-                RealmResults<ScreenOpsRecord> previousScreenOpsRecords = realm.where(ScreenOpsRecord.class)
-                        .lessThan("time", entry.getKey())
-                        .greaterThanOrEqualTo("time", startTime)
-                        .equalTo("operation", "off")
-                        .findAllSorted("time", Sort.DESCENDING);
-                Logger.v("previousScreenOpsRecords: " + previousScreenOpsRecords);
-                if (previousScreenOpsRecords.size() >= 1) {
-                    ScreenOpsRecord lastScreenOpsRecord = previousScreenOpsRecords.get(0);
 
-                    combinedScreenOffTimeAndDuration.get
-
-                    combinedScreenOffTimeAndDuration.put(lastScreenOpsRecord.getTime(), combinedScreenOffTimeAndDuration.get(lastScreenOpsRecord.getTime()) + entry.getValue());
-                    dateNeededToBeRemoved.add(entry.getKey());
-                }
-            }*/
-
-            /*RealmResults<ScreenOpsRecord> previousScreenOpsRecords = realm.where(ScreenOpsRecord.class)
-                    .lessThan("time", entry.getKey())
-                    .greaterThanOrEqualTo("time", startTime)
-                    .findAllSorted("time", Sort.DESCENDING);
-            Logger.v("previousScreenOpsRecords: " + previousScreenOpsRecords);
-            if (previousScreenOpsRecords.size() >= 1) {
-                ScreenOpsRecord lastScreenOpsRecord = previousScreenOpsRecords.get(0);
-                combinedScreenOffTimeAndDuration.put(lastScreenOpsRecord.getTime(), combinedScreenOffTimeAndDuration.get(lastScreenOpsRecord.getTime()) + entry.getValue());
-                dateNeededToBeRemoved.add(entry.getKey());
-            }*/
-
-        /*    i++;
-        }
-
-        if (!dateNeededToBeRemoved.isEmpty()) {
-            for (Date keyDate : dateNeededToBeRemoved) {
-                combinedScreenOffTimeAndDuration.remove(keyDate);
-            }
-        }
-        Logger.v("combinedScreenOffTimeAndDuration: " + combinedScreenOffTimeAndDuration);
-        return combinedScreenOffTimeAndDuration;*/
-
-        RealmResults<ScreenOpsRecord> allThisSleepCycleOffRecordResult = realm.where(ScreenOpsRecord.class)
-                .greaterThanOrEqualTo("time", startTime)
-                .lessThanOrEqualTo("time", endTime)
-                .equalTo("operation", "off")
-                .findAllSorted("time", Sort.ASCENDING);
+        RealmResults<ScreenOpsRecord> allThisSleepCycleOffRecordResult = getAllThisSleepCycleOffRecord(realm, startTime, endTime);
         Logger.v("allThisSleepCycleOffRecordResult: " + allThisSleepCycleOffRecordResult);
+        if (allThisSleepCycleOffRecordResult.isEmpty()) {
+            return new HashMap<>();
+        }
 
-        RealmResults<ScreenOpsRecord> allThisSleepCycleOnRecordResult = realm.where(ScreenOpsRecord.class)
-                .greaterThanOrEqualTo("time", allThisSleepCycleOffRecordResult.get(0).getTime())
-                .lessThanOrEqualTo("time", endTime)
-                .equalTo("operation", "on")
-                .findAllSorted("time", Sort.ASCENDING);
+        RealmResults<ScreenOpsRecord> allThisSleepCycleOnRecordResult = getAllThisSleepCycleOnRecord(realm, startTime, endTime, allThisSleepCycleOffRecordResult);
         Logger.v("allThisSleepCycleOnRecordResult: " + allThisSleepCycleOnRecordResult);
 
         List<ScreenOpsRecord> allThisSleepCycleOffRecordList = realm.copyFromRealm(allThisSleepCycleOffRecordResult);
@@ -230,17 +159,32 @@ public class GlobalFunction {
         }
 
 
-        Map<Date, Long> combinedScreenOffTimeAndDuration = new HashMap<>();
-        for (int i = 0; i < allThisSleepCycleOffRecordList.size(); i++) {
-            ScreenOpsRecord eachOffRecord = allThisSleepCycleOffRecordList.get(i);
-            ScreenOpsRecord eachOnRecord = allThisSleepCycleOnRecordList.get(i);
-            long timeDiff = eachOnRecord.getTime().getTime() - eachOffRecord.getTime().getTime();       // First getTime() is from class ScreenOpsRecord
-            Logger.v("timeDiff: " + timeDiff);
-            combinedScreenOffTimeAndDuration.put(eachOffRecord.getTime(), timeDiff);
-        }
+        Map<Date, Long> combinedScreenOffTimeAndDuration = convertScreenOnAndOffToScreenOffAndDuration(allThisSleepCycleOffRecordList, allThisSleepCycleOnRecordList);
         Logger.v("combinedScreenOffTimeAndDuration: " + combinedScreenOffTimeAndDuration);
         return combinedScreenOffTimeAndDuration;
     }
+
+
+    /**
+     * convert screen on & off record to screen off and duration
+     *
+     * @param offRecord (List<ScreenOpsRecord>) screen off record
+     * @param onRecord  (List<ScreenOpsRecord>) screen on record
+     * @return (Map<Date, Long>) screen off and duration map
+     */
+    public static Map<Date, Long> convertScreenOnAndOffToScreenOffAndDuration(List<ScreenOpsRecord> offRecord, List<ScreenOpsRecord> onRecord) {
+        Map<Date, Long> screenOffTimeAndDuration = new HashMap<>();
+        for (int i = 0; i < offRecord.size(); i++) {
+            ScreenOpsRecord eachOffRecord = offRecord.get(i);
+            ScreenOpsRecord eachOnRecord = onRecord.get(i);
+            long timeDiff = eachOnRecord.getTime().getTime() - eachOffRecord.getTime().getTime();       // First getTime() is from class ScreenOpsRecord
+            Logger.v("timeDiff: " + timeDiff);
+            screenOffTimeAndDuration.put(eachOffRecord.getTime(), timeDiff);
+        }
+        Logger.v("screenOffTimeAndDuration: " + screenOffTimeAndDuration);
+        return screenOffTimeAndDuration;
+    }
+
 
     /**
      * get max sleep duration entry
@@ -258,6 +202,43 @@ public class GlobalFunction {
         }
         Logger.v("maxSleepDurationEntry: " + maxSleepDurationEntry);
         return maxSleepDurationEntry;
+    }
+
+
+    /**
+     * get screen off records in this sleep cycle (from startTime to endTime)
+     *
+     * @param realm     Realm
+     * @param startTime start time
+     * @param endTime   end time
+     * @return RealmResults<ScreenOpsRecord> screen off records in this sleep cycle (which is lazy)
+     */
+    public static RealmResults<ScreenOpsRecord> getAllThisSleepCycleOffRecord(Realm realm, Date startTime, Date endTime) {
+        RealmResults<ScreenOpsRecord> allThisSleepCycleOffRecord = realm.where(ScreenOpsRecord.class)
+                .greaterThanOrEqualTo("time", startTime)
+                .lessThanOrEqualTo("time", endTime)
+                .equalTo("operation", "off")
+                .findAllSorted("time", Sort.ASCENDING);
+        Logger.v("allThisSleepCycleOffRecord: " + allThisSleepCycleOffRecord);
+        return allThisSleepCycleOffRecord;
+    }
+
+    /**
+     * get screen on records in this sleep cycle (from startTime to endTime)
+     *
+     * @param realm     Realm
+     * @param startTime start time
+     * @param endTime   end time
+     * @return RealmResults<ScreenOpsRecord> screen on records in this sleep cycle (which is lazy)
+     */
+    public static RealmResults<ScreenOpsRecord> getAllThisSleepCycleOnRecord(Realm realm, Date startTime, Date endTime, RealmResults<ScreenOpsRecord> allThisSleepCycleOffRecord) {
+        RealmResults<ScreenOpsRecord> allThisSleepCycleOnRecord = realm.where(ScreenOpsRecord.class)
+                .greaterThanOrEqualTo("time", allThisSleepCycleOffRecord.get(0).getTime())
+                .lessThanOrEqualTo("time", endTime)
+                .equalTo("operation", "on")
+                .findAllSorted("time", Sort.ASCENDING);
+        Logger.v("allThisSleepCycleOnRecord: " + allThisSleepCycleOnRecord);
+        return allThisSleepCycleOnRecord;
     }
 
 
@@ -401,6 +382,12 @@ public class GlobalFunction {
     public static String getCalendarDateString(Calendar calendar) {
         DateFormat format = SimpleDateFormat.getDateTimeInstance();
         return format.format(calendar.getTime());
+    }
+
+
+    public static boolean isScreenOn(Context context) {
+        PowerManager powerManager = (PowerManager) context.getApplicationContext().getSystemService(Context.POWER_SERVICE);
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH && powerManager.isInteractive() || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT_WATCH && powerManager.isScreenOn();
     }
 
 }
