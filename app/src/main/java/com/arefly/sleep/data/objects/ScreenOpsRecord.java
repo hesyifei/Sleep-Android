@@ -9,9 +9,20 @@ import io.realm.RealmObject;
  */
 public class ScreenOpsRecord extends RealmObject {
 
+    /**
+     * (String) operation name
+     * i.e. "on"/"off"
+     */
     private String operation;
+
+    /**
+     * (Date) record time
+     */
     private Date time;
 
+    /**
+     * (boolean) is last record of a sleep cycle
+     */
     private boolean isLastRecord;
 
 

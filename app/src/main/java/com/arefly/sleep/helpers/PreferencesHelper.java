@@ -29,7 +29,7 @@ public class PreferencesHelper {
     }
 
     public static long getLongestIgnoreSeconds(Context context) {
-        return getPreferences(context).getLong(context.getResources().getString(R.string.long_longest_ignore_seconds), 60);
+        return getPreferences(context).getLong(context.getResources().getString(R.string.long_longest_ignore_seconds), 30);
     }
 
 
