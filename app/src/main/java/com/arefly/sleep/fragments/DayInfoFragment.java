@@ -10,21 +10,21 @@ import com.arefly.sleep.R;
 import com.orhanobut.logger.Logger;
 
 /**
- * Created by eflyjason on 10/8/2016.
+ * Created by eflyjason on 11/8/2016.
  */
-public class StatisticsFragment extends Fragment {
+public class DayInfoFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Logger.i("StatisticsFragment onCreate()");
+        Logger.i("DayInfoFragment onCreate()");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Logger.i("StatisticsFragment onCreateView()");
+        Logger.i("DayInfoFragment onCreateView()");
 
-        return inflater.inflate(R.layout.fragment_statistics, container, false);
+        return inflater.inflate(R.layout.fragment_day_info, container, false);
     }
 
 }

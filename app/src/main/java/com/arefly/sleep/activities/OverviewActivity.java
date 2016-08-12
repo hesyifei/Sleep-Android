@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.arefly.sleep.R;
 import com.arefly.sleep.adapters.TabPagerAdapter;
+import com.arefly.sleep.fragments.DayInfoFragment;
 import com.arefly.sleep.fragments.StatisticsFragment;
 import com.arefly.sleep.helpers.GlobalFunction;
 import com.arefly.sleep.helpers.PreferencesHelper;
@@ -44,11 +45,11 @@ public class OverviewActivity extends AppCompatActivity {
 
         //fragments.add(StatisticsFragment.newInstance(""));
 
-        fragments.add(new StatisticsFragment());
-        titles.add("SSS");
+        fragments.add(new DayInfoFragment());
+        titles.add("Yesterday");
 
         fragments.add(new StatisticsFragment());
-        titles.add("woho");
+        titles.add("Statistics");
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         if (viewPager != null) {
@@ -64,7 +65,7 @@ public class OverviewActivity extends AppCompatActivity {
         initServiceAndAlarm(getApplicationContext());
 
         PreferencesHelper.setSleepTimeString("22:00", this.getApplicationContext());
-        PreferencesHelper.setWakeTimeString("09:00", this.getApplicationContext());
+        PreferencesHelper.setWakeTimeString("10:00", this.getApplicationContext());
         PreferencesHelper.setLongestIgnoreSeconds(60, this.getApplicationContext());
     }
 
