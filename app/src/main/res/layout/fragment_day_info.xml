@@ -11,11 +11,12 @@
         android:background="@color/colorPrimaryDark">
 
         <TextView
+            android:id="@+id/day_info_upper_label"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textAlignment="gravity"
-            android:text="haha" />
+            android:textColor="@color/colorWhiteText" />
 
     </LinearLayout>
 

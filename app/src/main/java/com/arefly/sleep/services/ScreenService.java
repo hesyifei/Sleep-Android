@@ -21,7 +21,7 @@ import com.orhanobut.logger.Logger;
  */
 public class ScreenService extends Service {
 
-    BroadcastReceiver mReceiver;
+    private BroadcastReceiver mReceiver;
 
     @Override
     public void onCreate() {

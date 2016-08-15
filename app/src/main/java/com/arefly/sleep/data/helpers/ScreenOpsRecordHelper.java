@@ -129,9 +129,9 @@ public class ScreenOpsRecordHelper {
     /**
      * convert screen on & off record to screen off and duration
      *
-     * @param offRecord (List<ScreenOpsRecord>) screen off record
-     * @param onRecord  (List<ScreenOpsRecord>) screen on record
-     * @return (Map<Date, Long>) screen off and duration map
+     * @param offRecord (List - ScreenOpsRecord) screen off record
+     * @param onRecord  (List - ScreenOpsRecord) screen on record
+     * @return (Map - Date, Long) screen off and duration map
      */
     public static Map<Date, Long> convertScreenOnAndOffToScreenOffAndDuration(List<ScreenOpsRecord> offRecord, List<ScreenOpsRecord> onRecord) {
         Map<Date, Long> screenOffTimeAndDuration = new HashMap<>();

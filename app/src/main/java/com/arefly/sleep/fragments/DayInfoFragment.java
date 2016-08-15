@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.arefly.sleep.R;
 import com.orhanobut.logger.Logger;
@@ -24,7 +25,12 @@ public class DayInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Logger.i("DayInfoFragment onCreateView()");
 
-        return inflater.inflate(R.layout.fragment_day_info, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_day_info, container, false);
+
+        TextView textView = (TextView) rootView.findViewById(R.id.day_info_upper_label);
+        textView.setText("Should work");
+
+        return rootView;
     }
 
 }

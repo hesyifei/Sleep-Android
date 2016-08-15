@@ -12,9 +12,9 @@ import java.util.List;
  */
 public class TabPagerAdapter extends FragmentPagerAdapter {
 
-    Context context;
-    List<String> titles;
-    List<Fragment> fragments;
+    private Context context;
+    private List<String> titles;
+    private List<Fragment> fragments;
 
     public TabPagerAdapter(FragmentManager fm, List<String> titles, List<Fragment> fragments, Context context) {
         super(fm);
