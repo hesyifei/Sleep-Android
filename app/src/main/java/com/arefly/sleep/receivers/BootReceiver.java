@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.arefly.sleep.R;
+import com.arefly.sleep.activities.BaseActivity;
 import com.arefly.sleep.activities.OverviewActivity;
 import com.arefly.sleep.helpers.GlobalFunction;
 import com.orhanobut.logger.Logger;
@@ -19,7 +20,7 @@ public class BootReceiver extends BroadcastReceiver {
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED) || intent.getAction().equals(context.getResources().getString(R.string.htc_action_quickboot_poweron))) {
             Logger.v("ACTION_BOOT_COMPLETED || QUICKBOOT_POWERON");
 
-            OverviewActivity.initServiceAndAlarm(context.getApplicationContext());
+            BaseActivity.initServiceAndAlarm(context.getApplicationContext());
 
             boolean isScreenOn = GlobalFunction.isScreenOn(context.getApplicationContext());
             Logger.e("isScreenOn: " + isScreenOn);
