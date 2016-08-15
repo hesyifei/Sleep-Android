@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Sleep</string>
+
+    <string name="open_drawer">Open Drawer</string>
+    <string name="close_drawer">Close Drawer</string>
+
     <string name="htc_action_quickboot_poweron">com.htc.intent.action.QUICKBOOT_POWERON</string>
     <string name="htc_action_quickboot_poweroff">com.htc.intent.action.QUICKBOOT_POWEROFF</string>
     <string name="bool_is_waken_up">isWakenUp</string>

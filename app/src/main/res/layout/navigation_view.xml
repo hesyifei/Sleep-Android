@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The navigation drawer -->
+<android.support.design.widget.NavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_view"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:clickable="true"
+    android:importantForAccessibility="no"
+    app:headerLayout="@layout/drawer_header"
+    app:itemIconTint="@color/drawer_item"
+    app:itemTextColor="@color/drawer_item"
+    app:menu="@menu/drawer"
+    app:theme="@style/ThemeOverlay.AppCompat.Dark" />

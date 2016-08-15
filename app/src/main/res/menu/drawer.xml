@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_overview"
+            android:checked="true"
+            android:icon="@mipmap/ic_launcher"
+            android:title="Overview"/>
+        <item
+            android:id="@+id/navigation_item_calendar"
+            android:icon="@mipmap/ic_launcher"
+            android:title="Calendar"/>
+        <item
+            android:id="@+id/navigation_item_settings"
+            android:icon="@mipmap/ic_launcher"
+            android:title="Settings"/>
+    </group>
+</menu>
