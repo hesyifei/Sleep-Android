@@ -1,6 +1,5 @@
 package com.arefly.sleep.adapters;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,13 +11,11 @@ import java.util.List;
  */
 public class TabPagerAdapter extends FragmentPagerAdapter {
 
-    private Context context;
     private List<String> titles;
     private List<Fragment> fragments;
 
-    public TabPagerAdapter(FragmentManager fm, List<String> titles, List<Fragment> fragments, Context context) {
+    public TabPagerAdapter(FragmentManager fm, List<String> titles, List<Fragment> fragments) {
         super(fm);
-        this.context = context;
         this.titles = titles;
         this.fragments = fragments;
     }

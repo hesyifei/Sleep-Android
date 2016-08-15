@@ -6,14 +6,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.annotation.LayoutRes;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.arefly.sleep.R;
+import com.arefly.sleep.fragments.OverviewFragment;
+import com.arefly.sleep.fragments.RecordFragment;
 import com.arefly.sleep.helpers.GlobalFunction;
 import com.arefly.sleep.helpers.PreferencesHelper;
 import com.arefly.sleep.receivers.CheckServiceAlarmReceiver;
@@ -22,15 +28,16 @@ import com.orhanobut.logger.Logger;
 /**
  * Created by eflyjason on 15/8/2016.
  */
-public class BaseActivity extends AppCompatActivity {
-    public DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
-
+public class MainActivity extends AppCompatActivity {
     @Override
-    public void setContentView(@LayoutRes int layoutResID) {
-        super.setContentView(layoutResID);
-        Logger.i("BaseActivity setContentView()");
-        onCreateDrawer();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Logger.i("MainActivity onCreate()");
+        setContentView(R.layout.activity_main);
+
+
+        replaceFragment(this, "Overview");
+
 
         initServiceAndAlarm(getApplicationContext());
 
@@ -39,52 +46,67 @@ public class BaseActivity extends AppCompatActivity {
         PreferencesHelper.setLongestIgnoreSeconds(60, this.getApplicationContext());
     }
 
-    protected void onCreateDrawer() {
-        Logger.i("BaseActivity onCreateDrawer()");
+    public static void setupDrawer(final AppCompatActivity mainActivity, final View fragmentView) {
+        Logger.d("MainActivity setupDrawer(" + mainActivity + ", " + fragmentView + ")");
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        final Toolbar toolbar = (Toolbar) fragmentView.findViewById(R.id.toolbar);
+        Logger.v("toolbar: " + toolbar);
+        mainActivity.setSupportActionBar(toolbar);
 
-        // R.id.drawer_layout should be in every activity with exactly the same id.
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawerLayout = (DrawerLayout) mainActivity.findViewById(R.id.drawer_layout);
+        Logger.v("drawerLayout: " + drawerLayout);
 
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer) {
+        final ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(mainActivity, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer) {
+            @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                //getActionBar().setTitle(R.string.app_name);
-                Logger.d("drawerToggle onDrawerClosed()");
+                //Logger.d("actionBarDrawerToggle onDrawerClosed()");
             }
 
+            @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                //getActionBar().setTitle(R.string.menu);
-                Logger.d("drawerToggle onDrawerOpened()");
+                //Logger.d("actionBarDrawerToggle onDrawerOpened()");
             }
         };
-        drawerLayout.addDrawerListener(drawerToggle);
+
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+
+
+        final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                Logger.d("drawerLayout onNavigationItemSelected(" + menuItem + ")");
+                replaceFragment(mainActivity, menuItem.getTitle().toString());
+                menuItem.setChecked(true);
+                drawerLayout.closeDrawers();
+                return true;
+            }
+        });
     }
 
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (drawerToggle.onOptionsItemSelected(item)) {
-            return true;
+    private static void replaceFragment(AppCompatActivity mainActivity, String title) {
+        Fragment fragment;
+        switch (title) {
+            case "Overview":
+                fragment = new OverviewFragment();
+                break;
+            case "Calendar":
+                fragment = new RecordFragment();
+                break;
+            default:
+                fragment = new OverviewFragment();
+                break;
         }
-        return super.onOptionsItemSelected(item);
-
-    }*/
-
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
+        FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)           // Maybe shouldn't use it
+                .replace(R.id.content_frame, fragment)
+                .commit();
     }
 
-    /*@Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
-    }*/
 
     public static void initServiceAndAlarm(Context context) {
         GlobalFunction.startOrStopScreenServiceIntent(context);

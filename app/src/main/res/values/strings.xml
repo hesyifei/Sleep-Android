@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">Sleep</string>
 
+    <string name="overview_fragment_name">Overview</string>
+    <string name="record_fragment_name">Calendar</string>
+
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
 

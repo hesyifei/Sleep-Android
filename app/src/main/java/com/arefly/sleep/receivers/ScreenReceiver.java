@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.support.v7.app.NotificationCompat;
 
 import com.arefly.sleep.R;
-import com.arefly.sleep.activities.OverviewActivity;
+import com.arefly.sleep.activities.MainActivity;
 import com.arefly.sleep.data.helpers.ScreenOpsRecordHelper;
 import com.arefly.sleep.data.objects.ScreenOpsRecord;
 import com.arefly.sleep.data.objects.SleepDurationRecord;
@@ -179,7 +179,7 @@ public class ScreenReceiver extends BroadcastReceiver {
                     Logger.d("realmDurationRecord saved: " + realmDurationRecord);
 
 
-                    Intent notificationIntent = new Intent(context, OverviewActivity.class);
+                    Intent notificationIntent = new Intent(context, MainActivity.class);
                     PendingIntent notificationPendingIntent = PendingIntent.getActivity(context, 0,
                             notificationIntent, 0);
 

@@ -11,7 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.NotificationCompat;
 
 import com.arefly.sleep.R;
-import com.arefly.sleep.activities.OverviewActivity;
+import com.arefly.sleep.activities.MainActivity;
 import com.arefly.sleep.helpers.GlobalFunction;
 import com.arefly.sleep.receivers.ScreenReceiver;
 import com.orhanobut.logger.Logger;
@@ -28,7 +28,7 @@ public class ScreenService extends Service {
         super.onCreate();
         Logger.i("ScreenService onCreate()");
 
-        Intent notificationIntent = new Intent(this, OverviewActivity.class);
+        Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent notificationPendingIntent = PendingIntent.getActivity(this, 0,
                 notificationIntent, 0);
 
