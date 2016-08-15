@@ -11,6 +11,7 @@ import android.support.v7.app.NotificationCompat;
 import com.arefly.sleep.R;
 import com.arefly.sleep.activities.MainActivity;
 import com.arefly.sleep.data.helpers.ScreenOpsRecordHelper;
+import com.arefly.sleep.data.helpers.SleepDurationRecordHelper;
 import com.arefly.sleep.data.objects.ScreenOpsRecord;
 import com.arefly.sleep.data.objects.SleepDurationRecord;
 import com.arefly.sleep.helpers.GlobalFunction;
@@ -138,8 +139,8 @@ public class ScreenReceiver extends BroadcastReceiver {
 
 
                     long sleepMilliseconds = (long) maxSleepDurationEntry.getValue();
-                    long sleepHours = TimeUnit.MILLISECONDS.toHours(sleepMilliseconds);
-                    long sleepMinutes = TimeUnit.MILLISECONDS.toMinutes(sleepMilliseconds) - TimeUnit.HOURS.toMinutes(sleepHours);
+                    String sleepMinutesAndHoursString = GlobalFunction.getHoursAndMinutesString(sleepMilliseconds, context);
+
 
                     Date sleepStartTime = (Date) maxSleepDurationEntry.getKey();
                     Date sleepEndTime = new Date(sleepStartTime.getTime() + sleepMilliseconds);
@@ -160,10 +161,10 @@ public class ScreenReceiver extends BroadcastReceiver {
                     } else {
                         // Special situation: morning sleep + night wake
                     }
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.US);
+                    SimpleDateFormat dateFormat = SleepDurationRecordHelper.SIMPLE_DATE_FORMAT;
                     String sleepDate = dateFormat.format(sleepDateCalendar.getTime());
 
-                    Logger.v("sleepDate: " + sleepDate + "\nsleepMilliseconds: " + sleepMilliseconds + " (" + sleepHours + "h" + sleepMinutes + "m)\nsleepStartTime: " + sleepStartTime + "\nsleepEndTime: " + sleepEndTime);
+                    Logger.v("sleepDate: " + sleepDate + "\nsleepMilliseconds: " + sleepMilliseconds + " (" + sleepMinutesAndHoursString + ")\nsleepStartTime: " + sleepStartTime + "\nsleepEndTime: " + sleepEndTime);
 
 
                     SleepDurationRecord durationRecord = new SleepDurationRecord();
@@ -184,7 +185,7 @@ public class ScreenReceiver extends BroadcastReceiver {
                             notificationIntent, 0);
 
                     String notificationTitle = "早安";
-                    String notificationText = "你昨天睡了" + sleepHours + "小時" + String.format(Locale.US, "%02d", sleepMinutes) + "分鐘!";
+                    String notificationText = "你昨天睡了" + sleepMinutesAndHoursString;
                     String notificationLongText = "早安\n\n" + notificationText + "\n\n輕觸查看詳細信息";
 
                     Notification morningNotification = new NotificationCompat.Builder(context)

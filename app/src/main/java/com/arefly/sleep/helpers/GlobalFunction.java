@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.PowerManager;
 
+import com.arefly.sleep.R;
 import com.arefly.sleep.services.ScreenService;
 import com.orhanobut.logger.Logger;
 
@@ -14,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by eflyjason on 4/8/2016.
@@ -147,9 +149,25 @@ public class GlobalFunction {
     }
 
 
+    public static String getHoursAndMinutesString(long milliseconds, Context context) {
+        long hours = TimeUnit.MILLISECONDS.toHours(milliseconds);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) - TimeUnit.HOURS.toMinutes(hours);
+
+        String hourUnit = singlePlural(hours, context.getResources().getString(R.string.hour), context.getResources().getString(R.string.hours));
+        String minuteUnit = singlePlural(minutes, context.getResources().getString(R.string.minute), context.getResources().getString(R.string.minutes));
+
+        return context.getResources().getString(R.string.hours_and_minutes, String.valueOf(hours), String.format(Locale.US, "%02d", minutes), hourUnit, minuteUnit);
+    }
+
+
     public static boolean isScreenOn(Context context) {
         PowerManager powerManager = (PowerManager) context.getApplicationContext().getSystemService(Context.POWER_SERVICE);
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH && powerManager.isInteractive() || Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT_WATCH && powerManager.isScreenOn();
+    }
+
+
+    public static String singlePlural(long count, String singular, String plural) {
+        return count == 1 ? singular : plural;
     }
 
 }

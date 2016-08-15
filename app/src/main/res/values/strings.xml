@@ -13,4 +13,11 @@
     <string name="string_earliest_sleep_time">earliestSleepTime</string>
     <string name="string_earliest_wake_time">earliestWakeTime</string>
     <string name="long_longest_ignore_seconds">longestIgnoreSeconds</string>
+
+    <string name="hour">hour</string>
+    <string name="hours">hours</string>
+    <string name="minute">minute</string>
+    <string name="minutes">minutes</string>
+
+    <string name="hours_and_minutes">%1$s %3$s %2$s %4$s</string>
 </resources>
