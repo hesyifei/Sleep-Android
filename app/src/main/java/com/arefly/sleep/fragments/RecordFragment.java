@@ -1,5 +1,6 @@
 package com.arefly.sleep.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.arefly.sleep.R;
+import com.arefly.sleep.activities.EachRecordActivity;
 import com.arefly.sleep.activities.MainActivity;
 import com.orhanobut.logger.Logger;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
@@ -55,6 +57,24 @@ public class RecordFragment extends Fragment implements OnDateSelectedListener {
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @Nullable CalendarDay date, boolean selected) {
         Logger.v("RecordFragment onDateSelected(" + date + ")");
+
+        /*final FragmentTransaction transaction = getFragmentManager()
+                .beginTransaction();
+
+        Fragment fragment = new DayInfoFragment();
+
+        // put the fragment in place
+        transaction.replace(R.id.record_main_frame, fragment);
+
+        // this is the part that will cause a fragment to be added to backstack,
+        // this way we can return to it at any time using this tag
+        transaction.addToBackStack(fragment.getClass().getName());
+
+        transaction.commit();*/
+
+        Intent intent = new Intent(this.getActivity(), EachRecordActivity.class);
+        startActivity(intent);
+
     }
 
 }

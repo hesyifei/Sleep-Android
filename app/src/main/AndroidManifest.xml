@@ -32,6 +32,9 @@
                     android:scheme="sleep" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.EachRecordActivity"
+            android:theme="@style/AppTheme"
+            />
 
         <service android:name=".services.ScreenService" />
 
