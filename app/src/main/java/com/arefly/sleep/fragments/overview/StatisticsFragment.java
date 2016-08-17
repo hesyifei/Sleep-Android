@@ -27,4 +27,12 @@ public class StatisticsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_statistics, container, false);
     }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Logger.i("DayInfoFragment onCreateView()");
+
+        // TODO: startDate after -7 day 00:00 (e.g.)
+    }
+
 }
