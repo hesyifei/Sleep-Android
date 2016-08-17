@@ -1,4 +1,4 @@
-package com.arefly.sleep.fragments.overview;
+package com.arefly.sleep.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

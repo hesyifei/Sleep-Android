@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 import com.arefly.sleep.R;
 import com.arefly.sleep.activities.MainActivity;
 import com.arefly.sleep.adapters.TabPagerAdapter;
-import com.arefly.sleep.fragments.overview.DayInfoFragment;
-import com.arefly.sleep.fragments.overview.StatisticsFragment;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
