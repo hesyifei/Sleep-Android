@@ -5,11 +5,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -44,6 +46,16 @@ public class MainActivity extends AppCompatActivity {
         PreferencesHelper.setSleepTimeString("22:00", this.getApplicationContext());
         PreferencesHelper.setWakeTimeString("10:00", this.getApplicationContext());
         PreferencesHelper.setLongestIgnoreSeconds(60, this.getApplicationContext());
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     public static void setupDrawer(final AppCompatActivity mainActivity, final View fragmentView) {
@@ -81,7 +93,12 @@ public class MainActivity extends AppCompatActivity {
                 Logger.d("drawerLayout onNavigationItemSelected(" + menuItem + ")");
                 replaceFragment(mainActivity, menuItem.getTitle().toString());
                 menuItem.setChecked(true);
-                drawerLayout.closeDrawers();
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        drawerLayout.closeDrawers();
+                    }
+                }, 300);
+                //drawerLayout.closeDrawers();
                 return true;
             }
         });

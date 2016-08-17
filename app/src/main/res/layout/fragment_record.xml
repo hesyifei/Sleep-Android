@@ -41,9 +41,9 @@
             android:id="@+id/calendar_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
             app:mcv_selectionColor="@color/colorAccent"
             app:mcv_showOtherDates="all" />
 
