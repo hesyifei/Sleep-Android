@@ -9,10 +9,6 @@
 
     <string name="htc_action_quickboot_poweron">com.htc.intent.action.QUICKBOOT_POWERON</string>
     <string name="htc_action_quickboot_poweroff">com.htc.intent.action.QUICKBOOT_POWEROFF</string>
-    <string name="bool_is_waken_up">isWakenUp</string>
-    <string name="string_earliest_sleep_time">earliestSleepTime</string>
-    <string name="string_earliest_wake_time">earliestWakeTime</string>
-    <string name="long_longest_ignore_seconds">longestIgnoreSeconds</string>
 
     <string name="hour">hour</string>
     <string name="hours">hours</string>
