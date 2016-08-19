@@ -20,16 +20,23 @@
                 style="@style/GeneralStatisticLabel"
                 android:layout_alignParentTop="true"
                 android:text="small"
-                app:layout_heightPercent="25%"
-                app:layout_widthPercent="60%" />
+                app:layout_heightPercent="15%"
+                app:layout_marginLeftPercent="2.5%"
+                app:layout_marginTopPercent="2.5%"
+                app:layout_widthPercent="77.5%" />
 
             <TextView
                 android:id="@+id/statistics_upper_label"
                 style="@style/GeneralStatisticLabel"
                 android:layout_below="@id/statistics_upper_label_small"
+                android:gravity="start|top"
                 android:text="BIG"
+                android:textSize="35sp"
+                android:textStyle="bold"
                 app:layout_heightPercent="35%"
-                app:layout_widthPercent="60%" />
+                app:layout_marginBottomPercent="2.5%"
+                app:layout_marginLeftPercent="2.5%"
+                app:layout_widthPercent="77.5%" />
 
             <TextView
                 android:id="@+id/statistics_lower_left_label_small"
@@ -37,14 +44,20 @@
                 android:layout_below="@id/statistics_upper_label"
                 android:text="left small"
                 app:layout_heightPercent="15%"
+                app:layout_marginLeftPercent="2.5%"
                 app:layout_widthPercent="50%" />
 
             <TextView
                 android:id="@+id/statistics_lower_left_label"
                 style="@style/GeneralStatisticLabel"
                 android:layout_below="@id/statistics_lower_left_label_small"
+                android:gravity="start|top"
                 android:text="left BIG"
-                app:layout_heightPercent="25%"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_heightPercent="30%"
+                app:layout_marginBottomPercent="2.5%"
+                app:layout_marginLeftPercent="2.5%"
                 app:layout_widthPercent="50%" />
 
             <TextView
@@ -55,6 +68,7 @@
                 android:layout_toRightOf="@id/statistics_lower_left_label_small"
                 android:text="right small"
                 app:layout_heightPercent="15%"
+                app:layout_marginRightPercent="2.5%"
                 app:layout_widthPercent="50%" />
 
             <TextView
@@ -63,8 +77,13 @@
                 android:layout_below="@id/statistics_lower_right_label_small"
                 android:layout_toEndOf="@id/statistics_lower_left_label"
                 android:layout_toRightOf="@id/statistics_lower_left_label"
+                android:gravity="start|top"
                 android:text="right BIG"
-                app:layout_heightPercent="25%"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                app:layout_heightPercent="30%"
+                app:layout_marginBottomPercent="2.5%"
+                app:layout_marginRightPercent="2.5%"
                 app:layout_widthPercent="50%" />
 
         </android.support.percent.PercentRelativeLayout>
