@@ -134,8 +134,9 @@ public class GlobalFunction {
 
     /**
      * Get current time (String)
+     * (WARNING: This method should only use with parseTime() instead of showing it user)
      *
-     * @return String (Format: 09:00)
+     * @return String (Format: 09:1)
      */
     public static String getCurrentTimeString() {
         Calendar now = GregorianCalendar.getInstance();
@@ -143,6 +144,12 @@ public class GlobalFunction {
     }
 
 
+    /**
+     * Get calendar date in readable String
+     *
+     * @param calendar Calendar
+     * @return String (Format: device date format)
+     */
     public static String getCalendarDateString(Calendar calendar) {
         DateFormat format = SimpleDateFormat.getDateTimeInstance();
         return format.format(calendar.getTime());
@@ -167,6 +174,25 @@ public class GlobalFunction {
         }
 
         return context.getResources().getString(stringRes, String.valueOf(hours), String.format(Locale.US, "%02d", minutes), hourUnit, minuteUnit);
+    }
+
+
+    public static long getSecondsSinceMidNight(Date time) {
+        Calendar startTimeCal = GregorianCalendar.getInstance();
+        startTimeCal.setTime(time);
+        int hours = startTimeCal.get(Calendar.HOUR_OF_DAY);
+        int minutes = startTimeCal.get(Calendar.MINUTE);
+        int seconds = startTimeCal.get(Calendar.SECOND);
+
+        long secondsSinceMidNight = TimeUnit.HOURS.toSeconds(hours) + TimeUnit.MINUTES.toSeconds(minutes) + seconds;
+        return secondsSinceMidNight;
+    }
+
+    public static String getTimeStringFromSecondsSinceMidNight(long secondsSinceMidNight) {
+        long hours = TimeUnit.SECONDS.toHours(secondsSinceMidNight);
+        long minutes = TimeUnit.SECONDS.toMinutes(secondsSinceMidNight) - TimeUnit.HOURS.toMinutes(hours);
+
+        return String.format(Locale.US, "%02d:%02d", hours, minutes);
     }
 
 

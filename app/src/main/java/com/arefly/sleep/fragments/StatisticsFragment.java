@@ -14,6 +14,7 @@ import com.arefly.sleep.helpers.GlobalFunction;
 import com.orhanobut.logger.Logger;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -44,6 +45,10 @@ public class StatisticsFragment extends Fragment {
 
         TextView upperLabel = (TextView) view.findViewById(R.id.statistics_upper_label);
         TextView upperLabelSmall = (TextView) view.findViewById(R.id.statistics_upper_label_small);
+        TextView lowerLeftLabel = (TextView) view.findViewById(R.id.statistics_lower_left_label);
+        TextView lowerLeftLabelSmall = (TextView) view.findViewById(R.id.statistics_lower_left_label_small);
+        TextView lowerRightLabel = (TextView) view.findViewById(R.id.statistics_lower_right_label);
+        TextView lowerRightLabelSmall = (TextView) view.findViewById(R.id.statistics_lower_right_label_small);
 
 
         // TODO: startDate after -7 day 00:00 (e.g.)
@@ -52,7 +57,7 @@ public class StatisticsFragment extends Fragment {
         SleepDurationRecordHelper.removeAllRepeatingDate(realm);
 
 
-        Calendar toBeCheckedStartTimeCal = Calendar.getInstance();
+        Calendar toBeCheckedStartTimeCal = GregorianCalendar.getInstance();
         toBeCheckedStartTimeCal.set(Calendar.MILLISECOND, 0);
         toBeCheckedStartTimeCal.set(Calendar.SECOND, 0);
         toBeCheckedStartTimeCal.set(Calendar.MINUTE, 0);
@@ -67,20 +72,31 @@ public class StatisticsFragment extends Fragment {
         Logger.v("allSleepDurationRecordInDays: " + allSleepDurationRecordInDays);
 
 
-        long averageSleepDuration = SleepDurationRecordHelper.getAverageSleepDuration(allSleepDurationRecordInDays);
+        SleepDurationRecordHelper.StatisticsData statisticsData = SleepDurationRecordHelper.getStatisticsData(allSleepDurationRecordInDays);
+
+        long averageSleepDuration = statisticsData.getAverageSleepDuration();
         Logger.v("averageSleepDuration: " + averageSleepDuration);
 
-        String averageSleepDurationString;
+        String averageSleepDurationString, averageStartTimeString, averageEndTimeString;
         if (averageSleepDuration == -1) {
             averageSleepDurationString = "N/A";
+            averageStartTimeString = "N/A";
+            averageEndTimeString = "N/A";
         } else {
             averageSleepDurationString = GlobalFunction.getHoursAndMinutesString(averageSleepDuration, false, true, getContext());
+            averageStartTimeString = statisticsData.getAverageStartTime();
+            averageEndTimeString = statisticsData.getAverageEndTime();
         }
 
 
         upperLabel.setText(averageSleepDurationString);
         upperLabelSmall.setText("Average Sleep Duration");
 
+        lowerLeftLabel.setText(averageStartTimeString);
+        lowerLeftLabelSmall.setText("Average Start Sleep Time");
+
+        lowerRightLabel.setText(averageEndTimeString);
+        lowerRightLabelSmall.setText("Average End Sleep Time");
     }
 
 }

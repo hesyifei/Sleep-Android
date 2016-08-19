@@ -1,6 +1,7 @@
 package com.arefly.sleep.data.helpers;
 
 import com.arefly.sleep.data.objects.SleepDurationRecord;
+import com.arefly.sleep.helpers.GlobalFunction;
 import com.orhanobut.logger.Logger;
 
 import java.text.SimpleDateFormat;
@@ -64,20 +65,67 @@ public class SleepDurationRecordHelper {
     }
 
 
-    public static long getAverageSleepDuration(RealmResults<SleepDurationRecord> realmResults) {
+    public static class StatisticsData {
+        public long averageSleepDuration = 0;
+        public String averageStartTime = "";
+        public String averageEndTime = "";
+
+        public long getAverageSleepDuration() {
+            return averageSleepDuration;
+        }
+
+        public void setAverageSleepDuration(long averageSleepDuration) {
+            this.averageSleepDuration = averageSleepDuration;
+        }
+
+        public String getAverageStartTime() {
+            return averageStartTime;
+        }
+
+        public void setAverageStartTime(String averageStartTime) {
+            this.averageStartTime = averageStartTime;
+        }
+
+        public String getAverageEndTime() {
+            return averageEndTime;
+        }
+
+        public void setAverageEndTime(String averageEndTime) {
+            this.averageEndTime = averageEndTime;
+        }
+    }
+
+    public static StatisticsData getStatisticsData(RealmResults<SleepDurationRecord> realmResults) {
+        StatisticsData statisticsData = new StatisticsData();
+
         int daysCount = realmResults.size();
 
         if (daysCount <= 0) {
-            return -1;
+            statisticsData.setAverageSleepDuration(-1);
+            return statisticsData;
         }
 
-        long returnDuration = 0;
+        long totalDuration = 0;
+        long totalStartTime = 0;
+        long totalEndTime = 0;
         for (int i = 0; i < realmResults.size(); i++) {
             SleepDurationRecord eachRecord = realmResults.get(i);
             Logger.v("realmResults[" + i + "]: " + eachRecord);
-            returnDuration += eachRecord.getDuration();
+            totalDuration += eachRecord.getDuration();
+
+            totalStartTime += GlobalFunction.getSecondsSinceMidNight(eachRecord.getStartTime());
+            totalEndTime += GlobalFunction.getSecondsSinceMidNight(eachRecord.getEndTime());
         }
-        return returnDuration/daysCount;
+
+        statisticsData.setAverageSleepDuration(totalDuration / daysCount);
+
+        long averageStartTimeSeconds = totalStartTime / daysCount;
+        statisticsData.setAverageStartTime(GlobalFunction.getTimeStringFromSecondsSinceMidNight(averageStartTimeSeconds));
+
+        long averageEndTimeSeconds = totalEndTime / daysCount;
+        statisticsData.setAverageEndTime(GlobalFunction.getTimeStringFromSecondsSinceMidNight(averageEndTimeSeconds));
+
+        return statisticsData;
     }
 
 }
