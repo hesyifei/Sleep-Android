@@ -20,7 +20,7 @@ public class EachRecordActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Logger.i("EachRecordActivity onCreate()");
 
-        setTitle("[DATE_HERE]");
+        setTitle("Record");
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -33,6 +33,9 @@ public class EachRecordActivity extends AppCompatActivity {
         if (extras != null) {
             if (extras.containsKey(SleepDurationRecordHelper.DATE_DATA_TO_BE_PASSED_ID)) {
                 String dateString = extras.getString(SleepDurationRecordHelper.DATE_DATA_TO_BE_PASSED_ID);
+
+                setTitle(dateString);
+
 
                 Fragment fragment = new DayInfoFragment();
 

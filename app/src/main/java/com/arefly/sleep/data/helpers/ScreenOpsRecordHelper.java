@@ -222,14 +222,14 @@ public class ScreenOpsRecordHelper {
         List<Integer> locationNeededToBeRemoved = new ArrayList<>();
         for (int i = 0; i < allThisSleepCycleRecord.size(); i++) {
             ScreenOpsRecord eachRecord = allThisSleepCycleRecord.get(i);
-            Logger.v("allThisSleepCycleRecordArray[" + i + "]: " + eachRecord);
+            Logger.v("allThisSleepCycleRecord[" + i + "]: " + eachRecord);
             if (i + 1 <= allThisSleepCycleRecord.size() - 1) {
                 // If have next record
                 ScreenOpsRecord nextRecord = allThisSleepCycleRecord.get(i + 1);
-                String eachRecordOperation = eachRecord.getOperation();
+                String thisRecordOperation = eachRecord.getOperation();
                 String nextRecordOperation = nextRecord.getOperation();
-                if ((eachRecordOperation.equals("on") && !nextRecordOperation.equals("off"))
-                        || (eachRecordOperation.equals("off") && !nextRecordOperation.equals("on"))) {
+                if ((thisRecordOperation.equals("on") && !nextRecordOperation.equals("off"))
+                        || (thisRecordOperation.equals("off") && !nextRecordOperation.equals("on"))) {
                     locationNeededToBeRemoved.add(i);
                 }
             }
