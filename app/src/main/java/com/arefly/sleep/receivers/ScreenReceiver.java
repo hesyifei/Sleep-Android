@@ -32,6 +32,10 @@ import io.realm.Sort;
  */
 public class ScreenReceiver extends BroadcastReceiver {
 
+    public static final String HTC_ACTION_QUICKBOOT_POWERON = "com.htc.intent.action.QUICKBOOT_POWERON";
+    public static final String HTC_ACTION_QUICKBOOT_POWEROFF = "com.htc.intent.action.QUICKBOOT_POWEROFF";
+
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Logger.i("ScreenReceiver onReceive()");
@@ -40,7 +44,7 @@ public class ScreenReceiver extends BroadcastReceiver {
         Logger.v("intent action: " + action);
 
 
-        if (action.equals(Intent.ACTION_SHUTDOWN) || action.equals(context.getResources().getString(R.string.htc_action_quickboot_poweroff))) {
+        if (action.equals(Intent.ACTION_SHUTDOWN) || action.equals(HTC_ACTION_QUICKBOOT_POWEROFF)) {
             Logger.v("ACTION_SHUTDOWN || QUICKBOOT_POWEROFF");
             saveLockData(false, context.getApplicationContext());
         } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {

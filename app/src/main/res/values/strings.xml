@@ -7,9 +7,6 @@
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
 
-    <string name="htc_action_quickboot_poweron">com.htc.intent.action.QUICKBOOT_POWERON</string>
-    <string name="htc_action_quickboot_poweroff">com.htc.intent.action.QUICKBOOT_POWEROFF</string>
-
     <string name="hour">hour</string>
     <string name="hours">hours</string>
     <string name="minute">minute</string>
