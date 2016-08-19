@@ -74,7 +74,7 @@ public class StatisticsFragment extends Fragment {
         if (averageSleepDuration == -1) {
             averageSleepDurationString = "N/A";
         } else {
-            averageSleepDurationString = GlobalFunction.getHoursAndMinutesString(averageSleepDuration, getContext());
+            averageSleepDurationString = GlobalFunction.getHoursAndMinutesString(averageSleepDuration, false, true, getContext());
         }
 
 

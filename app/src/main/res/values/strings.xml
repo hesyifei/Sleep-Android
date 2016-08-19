@@ -12,5 +12,12 @@
     <string name="minute">minute</string>
     <string name="minutes">minutes</string>
 
+    <string name="hour_short">h</string>
+    <string name="hours_short">h</string>
+    <string name="minute_short">m</string>
+    <string name="minutes_short">m</string>
+
     <string name="hours_and_minutes">%1$s %3$s %2$s %4$s</string>
+    <string name="hours_and_minutes_with_breakline">%1$s %3$s\n%2$s %4$s</string>
+    <string name="hours_and_minutes_short">%1$s%3$s %2$s%4$s</string>
 </resources>

@@ -141,7 +141,7 @@ public class ScreenReceiver extends BroadcastReceiver {
 
 
                     long sleepMilliseconds = (long) maxSleepDurationEntry.getValue();
-                    String sleepMinutesAndHoursString = GlobalFunction.getHoursAndMinutesString(sleepMilliseconds, context);
+                    String sleepMinutesAndHoursString = GlobalFunction.getHoursAndMinutesString(sleepMilliseconds, false, false, context);
 
 
                     Date sleepStartTime = (Date) maxSleepDurationEntry.getKey();
@@ -188,7 +188,7 @@ public class ScreenReceiver extends BroadcastReceiver {
 
                     String notificationTitle = "早安";
                     String notificationText = "你昨天睡了" + sleepMinutesAndHoursString;
-                    String notificationLongText = "早安\n\n" + notificationText + "\n\n輕觸查看詳細信息";
+                    String notificationLongText = "早安，" + notificationText + "\n\n輕觸查看詳細信息";
 
                     Notification morningNotification = new NotificationCompat.Builder(context)
                             .setSmallIcon(R.mipmap.ic_launcher)

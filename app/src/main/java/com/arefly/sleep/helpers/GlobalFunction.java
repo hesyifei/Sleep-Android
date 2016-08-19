@@ -149,14 +149,24 @@ public class GlobalFunction {
     }
 
 
-    public static String getHoursAndMinutesString(long milliseconds, Context context) {
+    public static String getHoursAndMinutesString(long milliseconds, boolean needBreakline, boolean needShortForm, Context context) {
         long hours = TimeUnit.MILLISECONDS.toHours(milliseconds);
         long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) - TimeUnit.HOURS.toMinutes(hours);
 
+        int stringRes = R.string.hours_and_minutes;
         String hourUnit = singlePlural(hours, context.getResources().getString(R.string.hour), context.getResources().getString(R.string.hours));
         String minuteUnit = singlePlural(minutes, context.getResources().getString(R.string.minute), context.getResources().getString(R.string.minutes));
 
-        return context.getResources().getString(R.string.hours_and_minutes, String.valueOf(hours), String.format(Locale.US, "%02d", minutes), hourUnit, minuteUnit);
+        if (needBreakline) {
+            stringRes = R.string.hours_and_minutes_with_breakline;
+        }
+        if (needShortForm) {
+            stringRes = R.string.hours_and_minutes_short;
+            hourUnit = singlePlural(hours, context.getResources().getString(R.string.hour_short), context.getResources().getString(R.string.hours_short));
+            minuteUnit = singlePlural(minutes, context.getResources().getString(R.string.minute_short), context.getResources().getString(R.string.minutes_short));
+        }
+
+        return context.getResources().getString(stringRes, String.valueOf(hours), String.format(Locale.US, "%02d", minutes), hourUnit, minuteUnit);
     }
 
 
