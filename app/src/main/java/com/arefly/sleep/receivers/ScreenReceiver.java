@@ -21,6 +21,7 @@ import com.orhanobut.logger.Logger;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Map;
 
 import io.realm.Realm;
@@ -148,14 +149,14 @@ public class ScreenReceiver extends BroadcastReceiver {
                     Date sleepEndTime = new Date(sleepStartTime.getTime() + sleepMilliseconds);
 
 
-                    Calendar sleepDateCalendar = Calendar.getInstance();
+                    Calendar sleepDateCalendar = GregorianCalendar.getInstance();
                     sleepDateCalendar.setTime(startTime);
 
                     Date shouldWakeTime = GlobalFunction.parseTime(PreferencesHelper.getWakeTimeString(context));
                     Date shouldSleepTime = GlobalFunction.parseTime(PreferencesHelper.getSleepTimeString(context));
                     if (shouldWakeTime.before(shouldSleepTime)) {
                         // Normal situation: morning wake + night sleep
-                        Calendar shouldSleepTimeCalendar = Calendar.getInstance();
+                        Calendar shouldSleepTimeCalendar = GregorianCalendar.getInstance();
                         shouldSleepTimeCalendar.setTime(shouldSleepTime);
                         if (sleepDateCalendar.get(Calendar.HOUR_OF_DAY) < shouldSleepTimeCalendar.get(Calendar.HOUR_OF_DAY)) {
                             sleepDateCalendar.add(Calendar.DAY_OF_YEAR, -1);

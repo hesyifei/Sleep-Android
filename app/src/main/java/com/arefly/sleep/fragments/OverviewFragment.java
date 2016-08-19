@@ -18,6 +18,7 @@ import com.orhanobut.logger.Logger;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -55,7 +56,7 @@ public class OverviewFragment extends Fragment {
 
         Fragment dayInfoFragment = new DayInfoFragment();
         DateFormat dateFormat = SleepDurationRecordHelper.SIMPLE_DATE_FORMAT;
-        Calendar yesterdayCal = Calendar.getInstance();
+        Calendar yesterdayCal = GregorianCalendar.getInstance();
         yesterdayCal.add(Calendar.DATE, -1);
         String dateToBeChecked = dateFormat.format(yesterdayCal.getTime());
 
