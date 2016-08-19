@@ -30,7 +30,7 @@ public class RecordFragment extends Fragment implements OnDateSelectedListener {
 
     private AppCompatActivity mainActivity;
 
-    MaterialCalendarView widget;
+    private MaterialCalendarView widget;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
