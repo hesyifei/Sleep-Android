@@ -238,6 +238,7 @@ public class ScreenOpsRecordHelper {
         if (!locationNeededToBeRemoved.isEmpty()) {
             realm.beginTransaction();
             for (Integer locationInteger : locationNeededToBeRemoved) {
+                Logger.v("prepare to remove " + locationInteger + " (" + allThisSleepCycleRecord.get(locationInteger) + ")");
                 // Can simply delete as realm object is lazy
                 allThisSleepCycleRecord.deleteFromRealm(locationInteger);
             }

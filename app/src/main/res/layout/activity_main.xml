@@ -20,9 +20,9 @@
         android:layout_gravity="start"
         android:clickable="true"
         android:importantForAccessibility="no"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark"
         app:headerLayout="@layout/drawer_header"
         app:itemIconTint="@color/drawer_item"
         app:itemTextColor="@color/drawer_item"
-        app:menu="@menu/drawer"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark" />
+        app:menu="@menu/drawer" />
 </android.support.v4.widget.DrawerLayout>
