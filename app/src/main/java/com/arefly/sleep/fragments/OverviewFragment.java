@@ -12,9 +12,12 @@ import android.view.ViewGroup;
 import com.arefly.sleep.R;
 import com.arefly.sleep.activities.MainActivity;
 import com.arefly.sleep.adapters.TabPagerAdapter;
+import com.arefly.sleep.data.helpers.SleepDurationRecordHelper;
 import com.orhanobut.logger.Logger;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -47,13 +50,26 @@ public class OverviewFragment extends Fragment {
         List<Fragment> fragments = new ArrayList<>();
         List<String> titles = new ArrayList<>();
 
+
         //fragments.add(StatisticsFragment.newInstance(""));
 
-        fragments.add(new DayInfoFragment());
+        Fragment dayInfoFragment = new DayInfoFragment();
+        DateFormat dateFormat = SleepDurationRecordHelper.SIMPLE_DATE_FORMAT;
+        Calendar yesterdayCal = Calendar.getInstance();
+        yesterdayCal.add(Calendar.DATE, -1);
+        String dateToBeChecked = dateFormat.format(yesterdayCal.getTime());
+
+        Bundle bundle = new Bundle();
+        bundle.putString(SleepDurationRecordHelper.DATE_DATA_TO_BE_PASSED_ID, dateToBeChecked);
+        dayInfoFragment.setArguments(bundle);
+
+        fragments.add(dayInfoFragment);
         titles.add("Yesterday");
+
 
         fragments.add(new StatisticsFragment());
         titles.add("Statistics");
+
 
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.view_pager);
         if (viewPager != null) {

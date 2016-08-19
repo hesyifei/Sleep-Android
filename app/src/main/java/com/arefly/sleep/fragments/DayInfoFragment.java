@@ -13,11 +13,6 @@ import com.arefly.sleep.data.objects.SleepDurationRecord;
 import com.arefly.sleep.helpers.GlobalFunction;
 import com.orhanobut.logger.Logger;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -44,17 +39,22 @@ public class DayInfoFragment extends Fragment {
         Logger.i("DayInfoFragment onViewCreated()");
 
 
-        String sleepDurationText;
+        String dateToBeChecked;
 
-        DateFormat dateFormat = SleepDurationRecordHelper.SIMPLE_DATE_FORMAT;
-        Calendar yesterdayCal = Calendar.getInstance();
-        yesterdayCal.add(Calendar.DATE, -1);
-        String dateToBeChecked = dateFormat.format(yesterdayCal.getTime());
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            dateToBeChecked = arguments.getString(SleepDurationRecordHelper.DATE_DATA_TO_BE_PASSED_ID);
+        } else {
+            dateToBeChecked = "ERROR";
+        }
+
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<SleepDurationRecord> queryResult = realm.where(SleepDurationRecord.class)
                 .equalTo("date", dateToBeChecked)
                 .findAll();
+
+        String sleepDurationText;
         if (queryResult.isEmpty()) {
             sleepDurationText = "empty!!";
         } else {

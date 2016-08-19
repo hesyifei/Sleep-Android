@@ -2,6 +2,7 @@ package com.arefly.sleep.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,15 +14,21 @@ import android.view.ViewGroup;
 import com.arefly.sleep.R;
 import com.arefly.sleep.activities.EachRecordActivity;
 import com.arefly.sleep.activities.MainActivity;
+import com.arefly.sleep.data.helpers.SleepDurationRecordHelper;
 import com.orhanobut.logger.Logger;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
 
+import java.text.DateFormat;
+import java.util.Date;
+
 /**
  * Created by eflyjason on 15/8/2016.
  */
 public class RecordFragment extends Fragment implements OnDateSelectedListener {
+
+    private AppCompatActivity mainActivity;
 
     MaterialCalendarView widget;
 
@@ -45,7 +52,7 @@ public class RecordFragment extends Fragment implements OnDateSelectedListener {
         // TODO: start new acitivy to show sleep time
         // TODO: add sleep time below the date button in calendar
 
-        AppCompatActivity mainActivity = (AppCompatActivity) getActivity();
+        mainActivity = (AppCompatActivity) getActivity();
         MainActivity.setupDrawer(mainActivity, view);
         mainActivity.setTitle(getString(R.string.record_fragment_name));
 
@@ -72,8 +79,20 @@ public class RecordFragment extends Fragment implements OnDateSelectedListener {
 
         transaction.commit();*/
 
-        Intent intent = new Intent(this.getActivity(), EachRecordActivity.class);
-        startActivity(intent);
+        final Date dateToBeCheckedDate = date.getDate();
+
+        // Delay here to make smoother animation
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                Intent intent = new Intent(mainActivity, EachRecordActivity.class);
+
+                DateFormat dateFormat = SleepDurationRecordHelper.SIMPLE_DATE_FORMAT;
+                String dateToBeChecked = dateFormat.format(dateToBeCheckedDate);
+                intent.putExtra(SleepDurationRecordHelper.DATE_DATA_TO_BE_PASSED_ID, dateToBeChecked);
+                startActivity(intent);
+            }
+        }, 100);
+
 
     }
 

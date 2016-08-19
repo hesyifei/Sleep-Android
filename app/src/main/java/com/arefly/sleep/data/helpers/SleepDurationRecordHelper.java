@@ -7,6 +7,8 @@ import java.util.Locale;
  * Created by eflyjason on 12/8/2016.
  */
 public class SleepDurationRecordHelper {
+    public static final String DATE_DATA_TO_BE_PASSED_ID = "Date";
+
     public static final String DATE_FORMAT = "yyyy/MM/dd";
     public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT, Locale.US);
 }

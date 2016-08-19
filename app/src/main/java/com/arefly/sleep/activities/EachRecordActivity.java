@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.arefly.sleep.data.helpers.SleepDurationRecordHelper;
 import com.arefly.sleep.fragments.DayInfoFragment;
 import com.orhanobut.logger.Logger;
 
@@ -26,8 +27,24 @@ public class EachRecordActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Fragment fragment = new DayInfoFragment();
-        getSupportFragmentManager().beginTransaction().add(android.R.id.content, fragment).commit();
+
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            if (extras.containsKey(SleepDurationRecordHelper.DATE_DATA_TO_BE_PASSED_ID)) {
+                String dateString = extras.getString(SleepDurationRecordHelper.DATE_DATA_TO_BE_PASSED_ID);
+
+                Fragment fragment = new DayInfoFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putString(SleepDurationRecordHelper.DATE_DATA_TO_BE_PASSED_ID, dateString);
+                fragment.setArguments(bundle);
+
+                getSupportFragmentManager().beginTransaction().add(android.R.id.content, fragment).commit();
+            }
+        }
+
+
     }
 
     @Override
