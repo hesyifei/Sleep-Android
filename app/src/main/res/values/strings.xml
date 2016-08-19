@@ -3,6 +3,7 @@
 
     <string name="overview_fragment_name">Overview</string>
     <string name="record_fragment_name">Calendar</string>
+    <string name="settings_fragment_name">Settings</string>
 
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
