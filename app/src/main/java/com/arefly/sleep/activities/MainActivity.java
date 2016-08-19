@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -56,6 +57,23 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_UP) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_MENU:
+                    Logger.v("KEYCODE_MENU onKeyUp");
+                    DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                    } else {
+                        drawerLayout.openDrawer(GravityCompat.START);
+                    }
+                    return true;
+            }
+        }
+        return super.onKeyUp(keyCode, event);
     }
 
     public static void setupDrawer(final AppCompatActivity mainActivity, final View fragmentView) {
