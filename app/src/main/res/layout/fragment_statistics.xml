@@ -15,6 +15,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <Spinner
+                android:id="@+id/statistics_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="#11FFFFFF"
+                android:popupBackground="@color/colorPrimary"
+                android:spinnerMode="dropdown"
+                app:layout_marginRightPercent="2.5%"
+                app:layout_marginTopPercent="2.5%" />
+
             <TextView
                 android:id="@+id/statistics_upper_label_small"
                 style="@style/GeneralStatisticLabel"

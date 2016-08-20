@@ -5,6 +5,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.arefly.sleep.R;
@@ -58,6 +61,25 @@ public class StatisticsFragment extends Fragment {
         TextView lowerLeftLabelSmall = (TextView) view.findViewById(R.id.statistics_lower_left_label_small);
         TextView lowerRightLabel = (TextView) view.findViewById(R.id.statistics_lower_right_label);
         TextView lowerRightLabelSmall = (TextView) view.findViewById(R.id.statistics_lower_right_label_small);
+
+
+        Spinner dropdown = (Spinner) view.findViewById(R.id.statistics_spinner);
+        String[] items = new String[]{"Last Week", "Last Month", "Last Year", "All Time"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item_statistics, items);
+        dropdown.setAdapter(adapter);
+        dropdown.setSelection(0, true);
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                Logger.v("onItemSelected " + parent.getItemAtPosition(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+            }
+        });
 
 
         // TODO: startDate after -7 day 00:00 (e.g.)
