@@ -1,10 +1,12 @@
 package com.arefly.sleep.fragments;
 
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.arefly.sleep.R;
@@ -64,6 +66,12 @@ public class DayInfoFragment extends Fragment {
 
         TextView textView = (TextView) view.findViewById(R.id.day_info_upper_label);
         textView.setText(sleepDurationText);
+
+
+        ImageView sleepImage = (ImageView) view.findViewById(R.id.day_info_lower_image_view);
+        sleepImage.setBackgroundResource(R.drawable.sleep_animation);
+        AnimationDrawable sleepAnimation = (AnimationDrawable) sleepImage.getBackground();
+        sleepAnimation.start();
     }
 
 }

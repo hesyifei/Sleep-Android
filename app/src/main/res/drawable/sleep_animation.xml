@@ -1,0 +1,6 @@
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sleep_animation" android:oneshot="false">
+    <item android:drawable="@drawable/sleep_animation_1" android:duration="500" />
+    <item android:drawable="@drawable/sleep_animation_2" android:duration="500" />
+    <item android:drawable="@drawable/sleep_animation_3" android:duration="500" />
+</animation-list>
