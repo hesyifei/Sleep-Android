@@ -55,6 +55,8 @@
                 style="@style/GeneralStatisticLabel"
                 android:layout_below="@id/statistics_upper_label"
                 android:text="left small"
+                android:textColor="#99FFFFFF"
+                android:textSize="12sp"
                 app:layout_heightPercent="15%"
                 app:layout_marginLeftPercent="2.5%"
                 app:layout_widthPercent="50%" />
@@ -65,6 +67,7 @@
                 android:layout_below="@id/statistics_lower_left_label_small"
                 android:gravity="start|top"
                 android:text="left BIG"
+                android:textColor="#99FFFFFF"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_heightPercent="30%"
@@ -79,6 +82,8 @@
                 android:layout_toEndOf="@id/statistics_lower_left_label_small"
                 android:layout_toRightOf="@id/statistics_lower_left_label_small"
                 android:text="right small"
+                android:textColor="#99FFFFFF"
+                android:textSize="12sp"
                 app:layout_heightPercent="15%"
                 app:layout_marginRightPercent="2.5%"
                 app:layout_widthPercent="50%" />
@@ -91,6 +96,7 @@
                 android:layout_toRightOf="@id/statistics_lower_left_label"
                 android:gravity="start|top"
                 android:text="right BIG"
+                android:textColor="#99FFFFFF"
                 android:textSize="30sp"
                 android:textStyle="bold"
                 app:layout_heightPercent="30%"
@@ -108,6 +114,7 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         android:background="@color/colorPrimaryLight">
+
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/statistics_line_chart"
             android:layout_width="match_parent"
