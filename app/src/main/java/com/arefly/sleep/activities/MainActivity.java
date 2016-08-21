@@ -1,6 +1,9 @@
 package com.arefly.sleep.activities;
 
 import android.app.AlarmManager;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -8,9 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new OverviewFragment();
                 break;
         }
-        FragmentManager fragmentManager = mainActivity.getSupportFragmentManager();
+        FragmentManager fragmentManager = mainActivity.getFragmentManager();
         fragmentManager.beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)           // Maybe shouldn't use it
                 .replace(R.id.content_frame, fragment)

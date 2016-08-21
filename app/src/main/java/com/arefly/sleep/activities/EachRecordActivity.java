@@ -4,8 +4,8 @@ package com.arefly.sleep.activities;
  * Created by eflyjason on 17/8/2016.
  */
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -43,7 +43,7 @@ public class EachRecordActivity extends AppCompatActivity {
                 bundle.putString(SleepDurationRecordHelper.DATE_DATA_TO_BE_PASSED_ID, dateString);
                 fragment.setArguments(bundle);
 
-                getSupportFragmentManager().beginTransaction().add(android.R.id.content, fragment).commit();
+                getFragmentManager().beginTransaction().add(android.R.id.content, fragment).commit();
             }
         }
 
