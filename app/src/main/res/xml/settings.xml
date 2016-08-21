@@ -32,7 +32,7 @@
             android:title="444"
             android:summary="555">
 
-            <!-- You can place more preferences here that will be shown on the next screen. -->
+            <!-- You can place more settings here that will be shown on the next screen. -->
 
             <CheckBoxPreference
                 android:key="next_screen_checkbox_preference"

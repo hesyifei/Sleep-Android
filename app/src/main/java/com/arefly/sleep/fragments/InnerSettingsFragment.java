@@ -15,7 +15,7 @@ public class InnerSettingsFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         Logger.i("InnerSettingsFragment onCreate()");
 
-        // Load the preferences from an XML resource
-        addPreferencesFromResource(R.xml.preferences);
+        // Load the settings from an XML resource
+        addPreferencesFromResource(R.xml.settings);
     }
 }
