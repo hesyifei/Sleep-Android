@@ -16,15 +16,10 @@
 
         <include layout="@layout/layout_title_bar" />
 
-        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-            android:id="@+id/calendar_view"
+        <FrameLayout
+            android:id="@+id/settings_frame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            app:mcv_selectionColor="@color/colorAccent"
-            app:mcv_showOtherDates="all" />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 </RelativeLayout>

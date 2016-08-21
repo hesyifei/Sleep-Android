@@ -23,6 +23,7 @@ import android.view.View;
 import com.arefly.sleep.R;
 import com.arefly.sleep.fragments.OverviewFragment;
 import com.arefly.sleep.fragments.RecordFragment;
+import com.arefly.sleep.fragments.SettingsFragment;
 import com.arefly.sleep.helpers.GlobalFunction;
 import com.arefly.sleep.helpers.PreferencesHelper;
 import com.arefly.sleep.receivers.CheckServiceAlarmReceiver;
@@ -132,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 fragment = new RecordFragment();
                 break;
             default:
-                fragment = new OverviewFragment();
+                fragment = new SettingsFragment();
                 break;
         }
         FragmentManager fragmentManager = mainActivity.getFragmentManager();
