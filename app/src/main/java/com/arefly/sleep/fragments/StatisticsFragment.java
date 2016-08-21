@@ -114,7 +114,7 @@ public class StatisticsFragment extends Fragment {
             averageStartTimeString = "N/A";
             averageEndTimeString = "N/A";
         } else {
-            averageSleepDurationString = GlobalFunction.getHoursAndMinutesString(averageSleepDuration, false, true, getContext());
+            averageSleepDurationString = GlobalFunction.getHoursAndMinutesString(averageSleepDuration, false, true, getActivity().getApplicationContext());
             averageStartTimeString = statisticsData.getAverageStartTime();
             averageEndTimeString = statisticsData.getAverageEndTime();
         }

@@ -61,7 +61,7 @@ public class DayInfoFragment extends Fragment {
             sleepDurationText = "empty!!";
         } else {
             long sleepMilliseconds = queryResult.get(0).getDuration();
-            sleepDurationText = GlobalFunction.getHoursAndMinutesString(sleepMilliseconds, true, false, getContext());
+            sleepDurationText = GlobalFunction.getHoursAndMinutesString(sleepMilliseconds, true, false, getActivity().getApplicationContext());
         }
 
         TextView textView = (TextView) view.findViewById(R.id.day_info_upper_label);
