@@ -1,53 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="123">
-
-        <CheckBoxPreference
-            android:key="checkbox_preference"
-            android:title="456"
-            android:summary="789" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="666">
+    <PreferenceCategory android:title="General">
 
         <EditTextPreference
-            android:key="edittext_preference"
-            android:title="888"
-            android:summary="999"
-            android:dialogTitle="000" />
+            android:defaultValue="20:00"
+            android:key="earliestSleepTime"
+            android:title="Earliest sleep time" />
+
+        <EditTextPreference
+            android:defaultValue="08:00"
+            android:key="earliestWakeTime"
+            android:title="Earliest wake time" />
+
+        <EditTextPreference
+            android:defaultValue="10"
+            android:inputType="number"
+            android:key="longestIgnoreSeconds"
+            android:title="Longest ignore seconds" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="333">
-
-        <!-- This PreferenceScreen tag serves as a screen break (similar to page break
-             in word processing). Like for other preference types, we assign a key
-             here so it is able to save and restore its instance state. -->
-        <PreferenceScreen
-            android:key="screen_preference"
-            android:title="444"
-            android:summary="555">
-
-            <!-- You can place more settings here that will be shown on the next screen. -->
-
-            <CheckBoxPreference
-                android:key="next_screen_checkbox_preference"
-                android:title="666"
-                android:summary="777" />
-
-        </PreferenceScreen>
+    <PreferenceCategory android:title="About">
 
         <PreferenceScreen
-            android:title="123"
-            android:summary="321">
-
-            <intent android:action="android.intent.action.VIEW"
-                android:data="http://www.android.com" />
-
+            android:summary="http://www.arefly.com/"
+            android:title="Arefly">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="http://www.arefly.com/" />
         </PreferenceScreen>
 
     </PreferenceCategory>

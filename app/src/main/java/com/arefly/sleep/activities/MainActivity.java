@@ -45,9 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
         initServiceAndAlarm(getApplicationContext());
 
-        PreferencesHelper.setSleepTimeString("22:00", this.getApplicationContext());
-        PreferencesHelper.setWakeTimeString("10:00", this.getApplicationContext());
-        PreferencesHelper.setLongestIgnoreSeconds(60, this.getApplicationContext());
+        //PreferencesHelper.setSleepTimeString("22:00", this.getApplicationContext());
+        //PreferencesHelper.setWakeTimeString("10:00", this.getApplicationContext());
+        //PreferencesHelper.setLongestIgnoreSeconds(60, this.getApplicationContext());
     }
 
     @Override

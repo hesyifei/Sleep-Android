@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.orhanobut.logger.Logger;
+
 /**
  * Created by eflyjason on 5/8/2016.
  */
@@ -33,7 +35,14 @@ public class PreferencesHelper {
     }
 
     public static long getLongestIgnoreSeconds(Context context) {
-        return getPreferences(context).getLong(LONG_LONGEST_IGNORE_SECONDS, 30);
+        String preferenceString = getPreferences(context).getString(LONG_LONGEST_IGNORE_SECONDS, "15");
+        try {
+            long returnLong = Long.parseLong(preferenceString);
+            return returnLong;
+        } catch (NumberFormatException nfe) {
+            Logger.w("getLongestIgnoreSeconds NumberFormatException: " + nfe.getMessage());
+            return 15;
+        }
     }
 
 
@@ -57,7 +66,7 @@ public class PreferencesHelper {
 
     public static void setLongestIgnoreSeconds(long seconds, Context context) {
         SharedPreferences.Editor editor = getPreferences(context).edit();
-        editor.putLong(LONG_LONGEST_IGNORE_SECONDS, seconds);
+        editor.putString(LONG_LONGEST_IGNORE_SECONDS, String.valueOf(seconds));
         editor.apply();
     }
 

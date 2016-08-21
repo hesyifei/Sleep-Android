@@ -1,8 +1,10 @@
 package com.arefly.sleep.applications;
 
 import android.app.Application;
+import android.preference.PreferenceManager;
 
 import com.arefly.sleep.BuildConfig;
+import com.arefly.sleep.R;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
@@ -25,6 +27,9 @@ public class SleepApplication extends Application {
 
         //Logger.v("BuildConfig.DEBUG = " + BuildConfig.DEBUG);
         Logger.i("SleepApplication onCreate()");
+
+
+        PreferenceManager.setDefaultValues(this, R.xml.settings, false);
 
 
         // Create a RealmConfiguration that saves the Realm file in the app's "files" directory.
