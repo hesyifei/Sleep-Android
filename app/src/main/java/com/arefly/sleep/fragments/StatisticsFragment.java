@@ -2,6 +2,7 @@ package com.arefly.sleep.fragments;
 
 import android.app.Fragment;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -131,13 +132,17 @@ public class StatisticsFragment extends Fragment {
 
         CombinedChart mChart = (CombinedChart) view.findViewById(R.id.statistics_chart);
         mChart.setDescription("");
-        mChart.setNoDataTextDescription("Nothing yet :)");
+        mChart.setNoDataText("Nothing yet :)");
         mChart.setTouchEnabled(true);
         mChart.setDragEnabled(true);
         mChart.setScaleEnabled(true);
         mChart.setDrawGridBackground(false);
         mChart.setHighlightPerDragEnabled(false);
         mChart.setBackgroundColor(Color.TRANSPARENT);
+
+        // https://github.com/PhilJay/MPAndroidChart/issues/89#issuecomment-55742468
+        Paint p = mChart.getPaint(mChart.PAINT_INFO);
+        p.setColor(Color.LTGRAY);
 
 
         AxisValueFormatter yLineAxisFormatter = new HourAxisValueFormatter(mChart);
@@ -165,7 +170,7 @@ public class StatisticsFragment extends Fragment {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         //xAxis.setTypeface(mTfLight);
         xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f); // only intervals of 1 day
+        xAxis.setGranularity(1f); // at least intervals of 1 day
         xAxis.setLabelCount(7);
         xAxis.setValueFormatter(xAxisFormatter);
 

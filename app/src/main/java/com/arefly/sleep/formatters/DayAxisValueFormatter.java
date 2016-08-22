@@ -74,8 +74,7 @@ public class DayAxisValueFormatter implements AxisValueFormatter {
 
         if (month == 1) {
             int x400 = month % 400;
-            if (x400 < 0)
-            {
+            if (x400 < 0) {
                 x400 = -x400;
             }
             boolean is29 = (month % 4) == 0 && x400 != 100 && x400 != 200 && x400 != 300;
