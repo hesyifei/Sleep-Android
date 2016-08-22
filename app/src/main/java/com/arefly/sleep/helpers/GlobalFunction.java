@@ -132,6 +132,11 @@ public class GlobalFunction {
         }
     }
 
+    public static String getTimeStringFromDate(Date time) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm", Locale.US);
+        return dateFormat.format(time);
+    }
+
     /**
      * Get current time (String)
      * (WARNING: This method should only use with parseTime() instead of showing it user)

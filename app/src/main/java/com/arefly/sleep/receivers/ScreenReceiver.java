@@ -187,9 +187,9 @@ public class ScreenReceiver extends BroadcastReceiver {
                     PendingIntent notificationPendingIntent = PendingIntent.getActivity(context, 0,
                             notificationIntent, 0);
 
-                    String notificationTitle = "早安";
-                    String notificationText = "你昨天睡了" + sleepMinutesAndHoursString;
-                    String notificationLongText = "早安，" + notificationText + "\n\n輕觸查看詳細信息";
+                    String notificationTitle = "Good morning!";
+                    String notificationText = "You've slept " + sleepMinutesAndHoursString + " yesterday!";
+                    String notificationLongText = notificationText + "\n\nSleep time: " + GlobalFunction.getTimeStringFromDate(sleepStartTime) + " - " + GlobalFunction.getTimeStringFromDate(sleepEndTime);
 
                     Notification morningNotification = new NotificationCompat.Builder(context)
                             .setSmallIcon(R.mipmap.ic_launcher)

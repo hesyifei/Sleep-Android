@@ -28,18 +28,19 @@ public class ScreenService extends Service {
         super.onCreate();
         Logger.i("ScreenService onCreate()");
 
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent notificationPendingIntent = PendingIntent.getActivity(this, 0,
-                notificationIntent, 0);
+        //Intent notificationIntent = new Intent(this, MainActivity.class);
+        //PendingIntent notificationPendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
         // TODO: Hide notification on morning? (seemly done)
         Notification notification = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 //.setStyle(new NotificationCompat.BigTextStyle()
                 //        .bigText("晚上好！今晚多睡會吧！\n\n輕觸查看詳細統計記錄..."))
-                .setContentTitle("晚上好！祝你睡個好覺！")
-                .setContentText("輕觸查看詳細記錄...")
-                .setContentIntent(notificationPendingIntent)
+                //.setContentTitle("晚上好！祝你睡個好覺！")
+                //.setContentText("輕觸查看詳細記錄...")
+                .setContentTitle("Good night!")
+                .setContentText("Have a nice sleep!")
+                //.setContentIntent(notificationPendingIntent)
                 .setPriority(Notification.PRIORITY_DEFAULT)
                 .setCategory(Notification.CATEGORY_SERVICE)
                 .build();
