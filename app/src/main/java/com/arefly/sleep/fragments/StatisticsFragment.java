@@ -1,6 +1,7 @@
 package com.arefly.sleep.fragments;
 
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +15,18 @@ import com.arefly.sleep.R;
 import com.arefly.sleep.data.helpers.SleepDurationRecordHelper;
 import com.arefly.sleep.data.objects.SleepDurationRecord;
 import com.arefly.sleep.formatters.DayAxisValueFormatter;
+import com.arefly.sleep.formatters.DurationHourAxisValueFormatter;
+import com.arefly.sleep.formatters.HourAxisValueFormatter;
 import com.arefly.sleep.helpers.GlobalFunction;
-import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.formatter.AxisValueFormatter;
 import com.orhanobut.logger.Logger;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -128,12 +129,39 @@ public class StatisticsFragment extends Fragment {
         lowerRightLabelSmall.setText("Average End Sleep Time");
 
 
-        BarChart chart = (BarChart) view.findViewById(R.id.statistics_chart);
-        List<BarEntry> entries = SleepDurationRecordHelper.getSleepDurationList(allSleepDurationRecordInDays);
+        CombinedChart mChart = (CombinedChart) view.findViewById(R.id.statistics_chart);
+        mChart.setDescription("");
+        mChart.setNoDataTextDescription("Nothing yet :)");
+        mChart.setTouchEnabled(true);
+        mChart.setDragEnabled(true);
+        mChart.setScaleEnabled(true);
+        mChart.setDrawGridBackground(false);
+        mChart.setHighlightPerDragEnabled(false);
+        mChart.setBackgroundColor(Color.TRANSPARENT);
 
-        AxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(chart);
 
-        XAxis xAxis = chart.getXAxis();
+        AxisValueFormatter yLineAxisFormatter = new HourAxisValueFormatter(mChart);
+        AxisValueFormatter yBarAxisFormatter = new DurationHourAxisValueFormatter(mChart);
+
+        YAxis leftAxis = mChart.getAxisLeft();
+        leftAxis.setDrawGridLines(false);
+        leftAxis.setValueFormatter(yBarAxisFormatter);
+        leftAxis.setAxisMinValue(0f);
+        leftAxis.setGranularity(0.5f);          // 0.5h=30m
+
+
+        YAxis rightAxis = mChart.getAxisRight();
+        rightAxis.setDrawGridLines(false);
+        rightAxis.setValueFormatter(yLineAxisFormatter);
+        rightAxis.setGranularity(120f);         // 120s=2m
+
+
+
+
+
+        AxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(mChart);
+
+        XAxis xAxis = mChart.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         //xAxis.setTypeface(mTfLight);
         xAxis.setDrawGridLines(false);
@@ -141,10 +169,13 @@ public class StatisticsFragment extends Fragment {
         xAxis.setLabelCount(7);
         xAxis.setValueFormatter(xAxisFormatter);
 
-        BarDataSet dataSet = new BarDataSet(entries, "Label"); // add entries to dataset
-        BarData lineData = new BarData(dataSet);
-        chart.setData(lineData);
-        chart.invalidate();
+        CombinedData chartData = SleepDurationRecordHelper.setCombinedData(new CombinedData(), allSleepDurationRecordInDays);
+        if (chartData != null) {
+            mChart.setData(chartData);
+            mChart.getData().setHighlightEnabled(false);
+        }
+        mChart.animateY(3000);
+        mChart.invalidate();
     }
 
 }

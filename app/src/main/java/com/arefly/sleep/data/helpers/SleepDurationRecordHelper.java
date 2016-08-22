@@ -1,8 +1,17 @@
 package com.arefly.sleep.data.helpers;
 
+import android.graphics.Color;
+
 import com.arefly.sleep.data.objects.SleepDurationRecord;
 import com.arefly.sleep.helpers.GlobalFunction;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.CombinedData;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.orhanobut.logger.Logger;
 
 import java.text.SimpleDateFormat;
@@ -130,17 +139,50 @@ public class SleepDurationRecordHelper {
     }
 
 
-    public static List<BarEntry> getSleepDurationList(RealmResults<SleepDurationRecord> realmResults) {
-        List<BarEntry> entries = new ArrayList<>();
+    public static CombinedData setCombinedData(CombinedData combinedData, RealmResults<SleepDurationRecord> realmResults) {
+        List<Entry> lineEntries = new ArrayList<>();
+        List<BarEntry> barEntries = new ArrayList<>();
         for (int i = 0; i < realmResults.size(); i++) {
             SleepDurationRecord eachRecord = realmResults.get(i);
+
             int daySince2016 = GlobalFunction.getDateDifference(eachRecord.getDate(), "2016/01/01", SIMPLE_DATE_FORMAT);
             Logger.v("getSleepDurationList daySince2016: " + daySince2016);
-            float sleepHours = (float) eachRecord.getDuration() / 1000 / 60 / 60;
-            Logger.v("getSleepDurationList sleepHours: " + sleepHours);
-            entries.add(new BarEntry(daySince2016, sleepHours));
+
+            float sleepDurationInHours = (float) eachRecord.getDuration() / 1000 / 60 / 60;
+            Logger.v("getSleepDurationList sleepDurationInHours: " + sleepDurationInHours);
+            barEntries.add(new BarEntry(daySince2016, sleepDurationInHours));
+
+            // TODO: time >00:00 will become really small (i.e. 00:10<23:50)
+            float sleepStartHour = GlobalFunction.getSecondsSinceMidNight(eachRecord.getStartTime());
+            Logger.v("getSleepDurationList sleepStartHour: " + sleepStartHour);
+            lineEntries.add(new Entry(daySince2016, sleepStartHour));
         }
-        return entries;
+
+        if ((barEntries.size() == 0) || (lineEntries.size() == 0)) {
+            return null;
+        }
+
+        BarDataSet barDataSet = new BarDataSet(barEntries, "Bar");
+        barDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        barDataSet.setColor(Color.LTGRAY);
+        barDataSet.setDrawValues(false);
+        barDataSet.setHighLightColor(Color.GRAY);
+        BarData barData = new BarData(barDataSet);
+        barData.setBarWidth(0.4f);
+        combinedData.setData(barData);
+
+        LineDataSet lineDataSet = new LineDataSet(lineEntries, "Line");
+        lineDataSet.setAxisDependency(YAxis.AxisDependency.RIGHT);
+        lineDataSet.setColor(Color.BLACK);
+        lineDataSet.setLineWidth(2f);
+        lineDataSet.setCircleColor(Color.BLACK);
+        lineDataSet.setCircleHoleRadius(3f);
+        lineDataSet.setCircleRadius(5f);
+        lineDataSet.setDrawValues(false);
+        LineData lineData = new LineData(lineDataSet);
+        combinedData.setData(lineData);
+
+        return combinedData;
     }
 
 }
