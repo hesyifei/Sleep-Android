@@ -10,6 +10,10 @@
 
     <string name="share_button">Share</string>
 
+    <string name="label_average_sleep_duration">Average Sleep Duration</string>
+    <string name="label_average_start_sleep_time">Average Start Sleep Time</string>
+    <string name="label_average_end_sleep_time">Average End Sleep Time</string>
+
     <string name="hour">hour</string>
     <string name="hours">hours</string>
     <string name="minute">minute</string>

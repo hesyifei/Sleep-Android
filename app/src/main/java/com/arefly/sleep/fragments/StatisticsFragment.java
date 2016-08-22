@@ -19,6 +19,7 @@ import com.arefly.sleep.formatters.DayAxisValueFormatter;
 import com.arefly.sleep.formatters.DurationHourAxisValueFormatter;
 import com.arefly.sleep.formatters.HourAxisValueFormatter;
 import com.arefly.sleep.helpers.GlobalFunction;
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -121,13 +122,13 @@ public class StatisticsFragment extends Fragment {
 
 
         upperLabel.setText(averageSleepDurationString);
-        upperLabelSmall.setText("Average Sleep Duration");
+        upperLabelSmall.setText(getResources().getString(R.string.label_average_sleep_duration));
 
         lowerLeftLabel.setText(averageStartTimeString);
-        lowerLeftLabelSmall.setText("Average Start Sleep Time");
+        lowerLeftLabelSmall.setText(getResources().getString(R.string.label_average_start_sleep_time));
 
         lowerRightLabel.setText(averageEndTimeString);
-        lowerRightLabelSmall.setText("Average End Sleep Time");
+        lowerRightLabelSmall.setText(getResources().getString(R.string.label_average_end_sleep_time));
 
 
         CombinedChart mChart = (CombinedChart) view.findViewById(R.id.statistics_chart);
@@ -141,7 +142,7 @@ public class StatisticsFragment extends Fragment {
         mChart.setBackgroundColor(Color.TRANSPARENT);
 
         // https://github.com/PhilJay/MPAndroidChart/issues/89#issuecomment-55742468
-        Paint p = mChart.getPaint(mChart.PAINT_INFO);
+        Paint p = mChart.getPaint(Chart.PAINT_INFO);
         p.setColor(Color.LTGRAY);
 
 
@@ -159,9 +160,6 @@ public class StatisticsFragment extends Fragment {
         rightAxis.setDrawGridLines(false);
         rightAxis.setValueFormatter(yLineAxisFormatter);
         rightAxis.setGranularity(120f);         // 120s=2m
-
-
-
 
 
         AxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(mChart);
