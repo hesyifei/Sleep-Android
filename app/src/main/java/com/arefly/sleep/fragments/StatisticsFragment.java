@@ -77,12 +77,11 @@ public class StatisticsFragment extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // TODO Auto-generated method stub
+                // Do nothing
             }
         });
 
 
-        // TODO: startDate after -7 day 00:00 (e.g.)
         Realm realm = Realm.getDefaultInstance();
 
         SleepDurationRecordHelper.removeAllRepeatingDate(realm);

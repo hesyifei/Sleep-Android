@@ -31,7 +31,6 @@ public class ScreenService extends Service {
         //Intent notificationIntent = new Intent(this, MainActivity.class);
         //PendingIntent notificationPendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
-        // TODO: Hide notification on morning? (seemly done)
         Notification notification = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 //.setStyle(new NotificationCompat.BigTextStyle()

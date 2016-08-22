@@ -49,7 +49,6 @@ public class RecordFragment extends Fragment implements OnDateSelectedListener {
         super.onViewCreated(view, savedInstanceState);
         Logger.i("RecordFragment onViewCreated()");
 
-        // TODO: start new acitivy to show sleep time
         // TODO: add sleep time below the date button in calendar
 
         mainActivity = (AppCompatActivity) getActivity();

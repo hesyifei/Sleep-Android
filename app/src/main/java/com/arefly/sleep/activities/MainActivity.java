@@ -25,7 +25,6 @@ import com.arefly.sleep.fragments.OverviewFragment;
 import com.arefly.sleep.fragments.RecordFragment;
 import com.arefly.sleep.fragments.SettingsFragment;
 import com.arefly.sleep.helpers.GlobalFunction;
-import com.arefly.sleep.helpers.PreferencesHelper;
 import com.arefly.sleep.receivers.CheckServiceAlarmReceiver;
 import com.orhanobut.logger.Logger;
 
@@ -45,9 +44,11 @@ public class MainActivity extends AppCompatActivity {
 
         initServiceAndAlarm(getApplicationContext());
 
-        //PreferencesHelper.setSleepTimeString("22:00", this.getApplicationContext());
-        //PreferencesHelper.setWakeTimeString("10:00", this.getApplicationContext());
-        //PreferencesHelper.setLongestIgnoreSeconds(60, this.getApplicationContext());
+
+        // For TESTING only
+        /*PreferencesHelper.setSleepTimeString("22:00", this.getApplicationContext());
+        PreferencesHelper.setWakeTimeString("10:00", this.getApplicationContext());
+        PreferencesHelper.setLongestIgnoreSeconds(60, this.getApplicationContext());*/
     }
 
     @Override

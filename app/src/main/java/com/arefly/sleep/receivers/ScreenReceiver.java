@@ -60,7 +60,6 @@ public class ScreenReceiver extends BroadcastReceiver {
 
     public static void saveLockData(boolean isScreenOn, Context context) {
         Logger.d("saveLockData(" + isScreenOn + ") called");
-        // TODO: Have to judge if current time is inside range of max. sleep time as this method is call-on-boot (seemly done)
 
         Realm realm = Realm.getDefaultInstance();
 
