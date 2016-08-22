@@ -15,7 +15,7 @@ android {
 
     defaultConfig {
         applicationId "com.arefly.sleep"
-        minSdkVersion 14
+        minSdkVersion 17
         targetSdkVersion 23
         versionCode code
         versionName "1.0"
