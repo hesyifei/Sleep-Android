@@ -2,6 +2,7 @@ package com.arefly.sleep.data.helpers;
 
 import com.arefly.sleep.data.objects.SleepDurationRecord;
 import com.arefly.sleep.helpers.GlobalFunction;
+import com.github.mikephil.charting.data.BarEntry;
 import com.orhanobut.logger.Logger;
 
 import java.text.SimpleDateFormat;
@@ -126,6 +127,20 @@ public class SleepDurationRecordHelper {
         statisticsData.setAverageEndTime(GlobalFunction.getTimeStringFromSecondsSinceMidNight(averageEndTimeSeconds));
 
         return statisticsData;
+    }
+
+
+    public static List<BarEntry> getSleepDurationList(RealmResults<SleepDurationRecord> realmResults) {
+        List<BarEntry> entries = new ArrayList<>();
+        for (int i = 0; i < realmResults.size(); i++) {
+            SleepDurationRecord eachRecord = realmResults.get(i);
+            int daySince2016 = GlobalFunction.getDateDifference(eachRecord.getDate(), "2016/01/01", SIMPLE_DATE_FORMAT);
+            Logger.v("getSleepDurationList daySince2016: " + daySince2016);
+            float sleepHours = (float) eachRecord.getDuration() / 1000 / 60 / 60;
+            Logger.v("getSleepDurationList sleepHours: " + sleepHours);
+            entries.add(new BarEntry(daySince2016, sleepHours));
+        }
+        return entries;
     }
 
 }

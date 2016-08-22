@@ -13,17 +13,16 @@ import android.widget.TextView;
 import com.arefly.sleep.R;
 import com.arefly.sleep.data.helpers.SleepDurationRecordHelper;
 import com.arefly.sleep.data.objects.SleepDurationRecord;
+import com.arefly.sleep.formatters.DayAxisValueFormatter;
 import com.arefly.sleep.helpers.GlobalFunction;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.AxisValueFormatter;
 import com.orhanobut.logger.Logger;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -129,38 +128,23 @@ public class StatisticsFragment extends Fragment {
         lowerRightLabelSmall.setText("Average End Sleep Time");
 
 
+        BarChart chart = (BarChart) view.findViewById(R.id.statistics_chart);
+        List<BarEntry> entries = SleepDurationRecordHelper.getSleepDurationList(allSleepDurationRecordInDays);
 
-        LineChart chart = (LineChart) view.findViewById(R.id.statistics_line_chart);
-        List<Entry> entries = new ArrayList<>();
-
-        entries.add(new Entry(0, 5));
-        entries.add(new Entry(1, 8));
-
-        // the labels that should be drawn on the XAxis
-        final String[] quarters = new String[]{"Q1", "Q2", "Q3", "Q4"};
-
-        AxisValueFormatter formatter = new AxisValueFormatter() {
-
-            @Override
-            public String getFormattedValue(float value, AxisBase axis) {
-                return quarters[(int) value];
-            }
-
-            // we don't draw numbers, so no decimal digits needed
-            @Override
-            public int getDecimalDigits() {
-                return 0;
-            }
-        };
+        AxisValueFormatter xAxisFormatter = new DayAxisValueFormatter(chart);
 
         XAxis xAxis = chart.getXAxis();
-        xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
-        xAxis.setValueFormatter(formatter);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        //xAxis.setTypeface(mTfLight);
+        xAxis.setDrawGridLines(false);
+        xAxis.setGranularity(1f); // only intervals of 1 day
+        xAxis.setLabelCount(7);
+        xAxis.setValueFormatter(xAxisFormatter);
 
-        LineDataSet dataSet = new LineDataSet(entries, "Label"); // add entries to dataset
-        LineData lineData = new LineData(dataSet);
+        BarDataSet dataSet = new BarDataSet(entries, "Label"); // add entries to dataset
+        BarData lineData = new BarData(dataSet);
         chart.setData(lineData);
-
+        chart.invalidate();
     }
 
 }

@@ -10,6 +10,7 @@ import com.arefly.sleep.services.ScreenService;
 import com.orhanobut.logger.Logger;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -209,6 +210,38 @@ public class GlobalFunction {
 
     public static String singlePlural(long count, String singular, String plural) {
         return count == 1 ? singular : plural;
+    }
+
+
+    public static int getDateDifference(String startDateString, String endDateString, SimpleDateFormat dateFormat) {
+        Date startDate, endDate;
+        try {
+            startDate = dateFormat.parse(startDateString);
+            endDate = dateFormat.parse(endDateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return 0;
+        }
+
+        Calendar sDate = timestampToCalendar(startDate.getTime());
+        Calendar eDate = timestampToCalendar(endDate.getTime());
+
+        long sDateMillis = sDate.getTimeInMillis();
+        long eDateMillis = eDate.getTimeInMillis();
+
+        long diff = Math.abs(eDateMillis - sDateMillis);
+
+        return (int) (diff / (24 * 60 * 60 * 1000));
+    }
+
+    public static Calendar timestampToCalendar(long timestamp) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(timestamp);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar;
     }
 
 }
