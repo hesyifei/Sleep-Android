@@ -74,6 +74,34 @@ public class SleepDurationRecordHelper {
         return allSleepDurationRecord;
     }
 
+    public static List<String> getAllAvailableDate(Realm realm) {
+        List<String> allDates = new ArrayList<>();
+
+        RealmResults<SleepDurationRecord> allSleepDurationRecord = realm.where(SleepDurationRecord.class)
+                .findAllSorted("startTime", Sort.ASCENDING);
+        Logger.v("allSleepDurationRecord: " + allSleepDurationRecord);
+
+        for (int i = 0; i < allSleepDurationRecord.size(); i++) {
+            SleepDurationRecord eachRecord = allSleepDurationRecord.get(i);
+            allDates.add(eachRecord.getDate());
+        }
+
+        return allDates;
+    }
+
+    public static boolean isAvailableDate(Realm realm, String date) {
+        SleepDurationRecord thatDaySleepDurationRecord = realm.where(SleepDurationRecord.class)
+                .equalTo("date", date)
+                .findFirst();
+        if (thatDaySleepDurationRecord == null) {
+            Logger.v("isAvailableDate thatDaySleepDurationRecord == null");
+            return false;
+        } else {
+            Logger.v("isAvailableDate thatDaySleepDurationRecord: " + thatDaySleepDurationRecord);
+            return true;
+        }
+    }
+
 
     public static class StatisticsData {
         public long averageSleepDuration = 0;

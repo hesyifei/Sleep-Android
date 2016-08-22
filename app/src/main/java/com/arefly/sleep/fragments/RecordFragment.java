@@ -2,6 +2,7 @@ package com.arefly.sleep.fragments;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -17,11 +18,17 @@ import com.arefly.sleep.activities.MainActivity;
 import com.arefly.sleep.data.helpers.SleepDurationRecordHelper;
 import com.orhanobut.logger.Logger;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.spans.DotSpan;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
+
+import io.realm.Realm;
 
 /**
  * Created by eflyjason on 15/8/2016.
@@ -30,7 +37,7 @@ public class RecordFragment extends Fragment implements OnDateSelectedListener {
 
     private AppCompatActivity mainActivity;
 
-    private MaterialCalendarView widget;
+    private MaterialCalendarView calendarView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,28 +62,19 @@ public class RecordFragment extends Fragment implements OnDateSelectedListener {
         MainActivity.setupDrawer(mainActivity, view);
         mainActivity.setTitle(getString(R.string.record_fragment_name));
 
+        Realm realm = Realm.getDefaultInstance();
 
-        widget = (MaterialCalendarView) view.findViewById(R.id.calendar_view);
-        widget.setOnDateChangedListener(this);
+
+        calendarView = (MaterialCalendarView) view.findViewById(R.id.calendar_view);
+        calendarView.setOnDateChangedListener(this);
+        calendarView.addDecorator(new HighlightDatesDecorator(Color.LTGRAY, SleepDurationRecordHelper.getAllAvailableDate(realm)));
     }
 
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @Nullable CalendarDay date, boolean selected) {
         Logger.v("RecordFragment onDateSelected(" + date + ")");
 
-        /*final FragmentTransaction transaction = getFragmentManager()
-                .beginTransaction();
-
-        Fragment fragment = new DayInfoFragment();
-
-        // put the fragment in place
-        transaction.replace(R.id.record_main_frame, fragment);
-
-        // this is the part that will cause a fragment to be added to backstack,
-        // this way we can return to it at any time using this tag
-        transaction.addToBackStack(fragment.getClass().getName());
-
-        transaction.commit();*/
+        final MaterialCalendarView thisCalendarView = widget;
 
         final Date dateToBeCheckedDate = date.getDate();
 
@@ -89,10 +87,30 @@ public class RecordFragment extends Fragment implements OnDateSelectedListener {
                 String dateToBeChecked = dateFormat.format(dateToBeCheckedDate);
                 intent.putExtra(SleepDurationRecordHelper.DATE_DATA_TO_BE_PASSED_ID, dateToBeChecked);
                 startActivity(intent);
+
+                thisCalendarView.clearSelection();
             }
         }, 100);
 
-
     }
 
+    private class HighlightDatesDecorator implements DayViewDecorator {
+        private final int color;
+        private final List<String> dates;
+
+        public HighlightDatesDecorator(int color, List<String> dates) {
+            this.color = color;
+            this.dates = dates;
+        }
+
+        @Override
+        public boolean shouldDecorate(CalendarDay day) {
+            return dates.contains(SleepDurationRecordHelper.SIMPLE_DATE_FORMAT.format(day.getDate()));
+        }
+
+        @Override
+        public void decorate(DayViewFacade view) {
+            view.addSpan(new DotSpan(4, color));
+        }
+    }
 }
