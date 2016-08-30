@@ -101,7 +101,7 @@ public class OverviewFragment extends Fragment {
             case R.id.menu_item_share:
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, "Put whatever you want");
+                intent.putExtra(Intent.EXTRA_TEXT, "Get Sleep app on Google Play Store today!\n\nhttps://play.google.com/store/apps/details?id=com.arefly.sleep");
                 startActivity(intent);
                 return true;
             default:
